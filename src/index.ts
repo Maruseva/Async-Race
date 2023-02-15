@@ -1,4 +1,4 @@
-import { Garage } from "./pages/garage/garage.view";
+import { App } from "./components/app/app";
 
-const app = new Garage("root");
+const app = new App("root");
 app.render();
