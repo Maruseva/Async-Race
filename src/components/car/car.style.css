@@ -1,0 +1,16 @@
+.car__item {
+    border-bottom: 5px dashed black;
+    position: relative;
+    height: 55px;
+}
+
+.car__carImg {
+    height: 85px;
+    position: absolute;
+}
+
+.car__flagImg {
+    height: 60px;
+    position: absolute;
+    right: 100px;
+}

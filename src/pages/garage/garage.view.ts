@@ -1,7 +1,11 @@
+import { Car } from "../../components/car/car.view";
+
 export class Garage {
   private readonly selector: string;
+  private car: Car;
   constructor(selector: string) {
     this.selector = selector;
+    this.car = new Car('#garage__cars')
   }
 
   public render(): void {
@@ -36,5 +40,7 @@ export class Garage {
         </div>
     </div>`;
     root.appendChild(div);
+
+    this.car.render();
   }
 }
