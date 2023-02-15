@@ -1,12 +1,12 @@
 import './header.style.css';
 
 export class Header {
-    private readonly id: string;
-    constructor(id: string) {
-        this.id = id;
+    private readonly selector: string;
+    constructor(selector: string) {
+        this.selector = selector;
     }
     public render(): void {
-        const root = <HTMLDivElement>document.getElementById(this.id);
+        const root = <HTMLDivElement>document.querySelector(this.selector);
         const div = <HTMLDivElement>document.createElement('div');
         div.innerHTML = `<div>
             <button>TO GARAGE</button>
