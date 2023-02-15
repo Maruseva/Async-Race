@@ -1,16 +1,13 @@
 export class Garage {
-    private readonly id: string;
-    constructor(id: string) {
-        this.id = id;
-    }
+  private readonly id: string;
+  constructor(id: string) {
+    this.id = id;
+  }
 
-    public render (): void {
-        const root = <HTMLDivElement>document.getElementById(this.id);
-        root.innerHTML = `<div>
-        <div>
-            <button>TO GARAGE</button>
-            <button>TO WINNERS</button>
-        </div>
+  public render(): void {
+    const root = <HTMLDivElement>document.getElementById(this.id);
+    const div = <HTMLDivElement>document.createElement("div");
+    div.innerHTML = `<div>
         <div>
             <div>
                 <input type="text">
@@ -34,5 +31,6 @@ export class Garage {
         </div>
         <div id="garage__cars"></div>
     </div>`;
-    }
+    root.appendChild(div);
+  }
 }
