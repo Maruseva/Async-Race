@@ -1,14 +1,17 @@
 import { Car } from "../../components/car/car.view";
+import { Cars, GarageController } from "./garage.controller";
 
 export class Garage {
   private readonly selector: string;
   private car: Car;
+  private garageController: GarageController;
   constructor(selector: string) {
     this.selector = selector;
-    this.car = new Car('#garage__cars')
+    this.car = new Car("#garage__cars");
+    this.garageController = new GarageController();
   }
 
-  public render(): void {
+  public async render(): Promise<void> {
     const root = <HTMLDivElement>document.querySelector(this.selector);
     const div = <HTMLDivElement>document.createElement("div");
     div.innerHTML = `<div>
@@ -41,6 +44,11 @@ export class Garage {
     </div>`;
     root.appendChild(div);
 
-    this.car.render();
+    const response =  await this.getCars('http://127.0.0.1:3000/garage');
+    response.forEach((element) => this.car.render(element.name, element.colot));
+  }
+
+  public async getCars(url: string): Promise<Cars[]> {
+    return await this.garageController.getCars(url);
   }
 }

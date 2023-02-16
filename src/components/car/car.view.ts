@@ -8,7 +8,7 @@ export class Car {
         this.selector = selector;
     }
 
-    public render(name?: string, color?: string): void {
+    public render(name: string, color: string): void {
         const wrap = <HTMLDivElement>document.querySelector(this.selector);
         const div = <HTMLDivElement>document.createElement('div');
         div.innerHTML = `<div>
