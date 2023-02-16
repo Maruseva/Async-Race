@@ -1,5 +1,11 @@
 import { CarInRow } from "../../components/car/car.view";
 
+export interface Car {
+  name: string,
+  color: string,
+  id: number
+}
+
 export class Garage {
   private readonly selector: string;
   constructor(selector: string) {

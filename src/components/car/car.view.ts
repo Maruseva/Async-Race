@@ -1,6 +1,7 @@
 import "./car.style.css";
 import carImg from "../../assests/img/car.svg";
 import flagImg from "../../assests/img/flag.png";
+import { Car } from "../../pages/garage/garage.view";
 
 export class CarInRow {
     public static render(car: Car): Element {
