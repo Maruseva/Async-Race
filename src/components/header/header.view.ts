@@ -1,5 +1,3 @@
-import './header.style.css';
-
 export class Header {
     private readonly selector: string;
     constructor(selector: string) {
