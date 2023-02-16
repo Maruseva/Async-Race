@@ -1,13 +1,18 @@
 import { Garage } from "../../pages/garage/garage.view";
+import { Header } from "../header/header.view";
 
 export class App {
-    private readonly id: string;
-    constructor(id: string) {
-        this.id = id;
+    private readonly selector: string;
+    private header: Header;
+    private garage: Garage;
+    constructor(selector: string) {
+        this.selector = selector;
+        this.header = new Header(this.selector);
+        this.garage = new Garage(this.selector);
     }
 
-    public render(): void {
-        const garage = new Garage("root");
-        garage.render();
+    public run(): void {
+        this.header.render();
+        this.garage.render();
     }
 }

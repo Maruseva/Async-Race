@@ -1,10 +1,10 @@
 export class Car {
-    private readonly id: string;
-    constructor(id: string) {
-        this.id = id
+    private readonly selector: string;
+    constructor(selector: string) {
+        this.selector = selector;
     }
 
     public render(name: string, color: string): void {
-        const wrap = <HTMLDivElement>document.getElementById(this.id);
+        const wrap = <HTMLDivElement>document.querySelector(this.selector);
     }
 }

@@ -1,16 +1,13 @@
 export class Garage {
-    private readonly id: string;
-    constructor(id: string) {
-        this.id = id;
-    }
+  private readonly selector: string;
+  constructor(selector: string) {
+    this.selector = selector;
+  }
 
-    public render (): void {
-        const root = <HTMLDivElement>document.getElementById(this.id);
-        root.innerHTML = `<div>
-        <div>
-            <button>TO GARAGE</button>
-            <button>TO WINNERS</button>
-        </div>
+  public render(): void {
+    const root = <HTMLDivElement>document.querySelector(this.selector);
+    const div = <HTMLDivElement>document.createElement("div");
+    div.innerHTML = `<div>
         <div>
             <div>
                 <input type="text">
@@ -33,6 +30,11 @@ export class Garage {
             <span>Page #</span>
         </div>
         <div id="garage__cars"></div>
+        <div>
+            <button>PREV</button>
+            <button>NEXT</button>
+        </div>
     </div>`;
-    }
+    root.appendChild(div);
+  }
 }
