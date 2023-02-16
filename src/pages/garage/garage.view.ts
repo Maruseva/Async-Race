@@ -43,12 +43,5 @@ export class Garage {
         </div>
     </div>`;
     root.appendChild(div);
-
-    const response =  await this.getCars('http://127.0.0.1:3000/garage');
-    response.forEach((element) => this.car.render(element.name, element.colot));
-  }
-
-  public async getCars(url: string): Promise<Cars[]> {
-    return await this.garageController.getCars(url);
   }
 }
