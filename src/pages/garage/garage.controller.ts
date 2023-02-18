@@ -1,23 +1,16 @@
-import { Header } from "../../components/header/header.view";
-import { Car, Garage } from "./garage.view";
+import { GarageService } from "../../services/garage.service";
+import { Garage } from "./garage.view";
 
 export class GarageController {
-  private readonly selector: string;
-  private header: Header;
   private garage: Garage;
-  constructor(selector: string) {
-    this.selector = selector;
-    this.header = new Header(this.selector);
-    this.garage = new Garage(this.selector);
+  private service: GarageService;
+  constructor(garage: Garage, sevice: GarageService) {
+    this.garage = garage;
+    this.service = sevice;
   }
   
-  private async getCars(url: string): Promise<Car[]> {
-    const response = await fetch(url);
-    return response.json();
-  }
-
   public async render(): Promise<void> {
-    const response =  await this.getCars('http://127.0.0.1:3000/garage');
+    const response =  await this.service.getCars();
     this.garage.render(response);
   }
 }
