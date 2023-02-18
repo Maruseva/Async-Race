@@ -1,5 +1,5 @@
 import { Header } from "../../components/header/header.view";
-import { Garage } from "./garage.view";
+import { Car, Garage } from "./garage.view";
 
 export class GarageController {
   private readonly selector: string;
@@ -16,9 +16,8 @@ export class GarageController {
     return response.json();
   }
 
-  public async render(): void {
+  public async render(): Promise<void> {
     const response =  await this.getCars('http://127.0.0.1:3000/garage');
-    this.header.render();
     this.garage.render(response);
   }
 }
