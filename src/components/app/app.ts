@@ -13,6 +13,10 @@ export class App {
 
     public run(): void {
         this.header.render();
-        this.garage.render();
+        this.garage.render([{
+            "name": "Tesla",
+            "color": "#e6e6fa",
+            "id": 1
+          }]);
     }
 }
