@@ -49,6 +49,7 @@ export class Garage {
         <button>RESET</button>
         <button>GENERATE CARS</button>
     </div>`;
+
     return div;
   }
 
