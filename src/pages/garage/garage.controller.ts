@@ -16,11 +16,20 @@ export class GarageController {
 
   private async addCar(car: AddCar): Promise<void> {
     await this.service.addCar(car);
+    const response = await this.service.getCars();
     this.garage.clear();
-    this.render();
+    this.garage.renderCars(response);
+  }
+
+  private async deleteCar(id: number): Promise<void> {
+    await this.service.deleteCar(id);
+    const response = await this.service.getCars();
+    this.garage.clear();
+    this.garage.renderCars(response);
   }
 
   public init(): void {
     this.garage.bindAddCar(this.addCar.bind(this));
+    this.garage.bindDeleteCar(this.deleteCar.bind(this));
   }
 }
