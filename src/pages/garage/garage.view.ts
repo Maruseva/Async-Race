@@ -1,9 +1,10 @@
 import { CarInRow } from "../../components/car/car.view";
+import { GarageController } from "./garage.controller";
 
 export interface Car {
-  name: string,
-  color: string,
-  id: number
+  name: string;
+  color: string;
+  id: number;
 }
 
 export class Garage {
@@ -25,16 +26,16 @@ export class Garage {
     cars.forEach((element) => {
       const carInRow = CarInRow.render(element);
       div.appendChild(carInRow);
-    })
+    });
 
     const pagination = this.getPagination();
     div.appendChild(pagination);
-   
+
     root.appendChild(div);
   }
   private getControl(): Element {
     const div = <HTMLDivElement>document.createElement("div");
-    div.innerHTML = `<div>
+    div.innerHTML = `<div class="create">
         <input type="text">
         <input type="color">
         <button>CREATE</button>
@@ -67,5 +68,28 @@ export class Garage {
       <button>PREV</button>
       <button>NEXT</button>`;
     return div;
+  }
+
+  public bindAddCar(handler: Function): void {
+    const button = <HTMLButtonElement>(
+      document.querySelector(".create > button")
+    );
+    button.addEventListener("click", () => {
+      const text = <HTMLInputElement>(
+        document.querySelector('.create > input[type="text"]')
+      );
+      if (text.value) {
+        const color = <HTMLInputElement>(
+          document.querySelector('.create > input[type="color"]')
+        );
+        const param = { name: text.value, color: color.value };
+        handler(param);
+      }
+    });
+  }
+
+  public clear(): void {
+    const root = <HTMLDivElement>document.querySelector(this.selector);
+    root.innerHTML = '';
   }
 }

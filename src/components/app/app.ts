@@ -13,8 +13,9 @@ export class App {
         this.garageController = new GarageController(new Garage(this.selector), new GarageService());
     }
 
-    public run(): void {
+    public async run(): Promise<void> {
         this.header.render();
-        this.garageController.render();
+        await this.garageController.render();
+        this.garageController.init();
     }
 }
