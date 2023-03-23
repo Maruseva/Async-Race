@@ -41,10 +41,18 @@ export class GarageController {
     this.garage.renderCars(response);
   }
 
+  private async generateCars(cars: CarWithoudId[]): Promise<void> {
+    cars.forEach((item) => this.service.addCar(item));
+    const response = await this.service.getCars();
+    this.garage.clear();
+    this.garage.renderCars(response);
+  }
+
   public init(): void {
     this.garage.bindAddCar(this.addCar.bind(this));
     this.garage.bindDeleteCar(this.deleteCar.bind(this));
     this.garage.bindGetCar(this.getCar.bind(this));
     this.garage.bindUpdateCar(this.updateCar.bind(this));
+    this.garage.bindGenerateCars(this.generateCars.bind(this));
   }
 }

@@ -1,5 +1,7 @@
+import { carsNames } from "../../assests/data/data";
 import { CarInRow } from "../../components/car/car.view";
 import { Car } from "../../types";
+import { getRandom } from "../../utils/utils";
 
 export class Garage {
   private readonly selector: string;
@@ -52,7 +54,7 @@ export class Garage {
     <div>
         <button>RACE</button>
         <button>RESET</button>
-        <button>GENERATE CARS</button>
+        <button class="generate__cars">GENERATE CARS</button>
     </div>`;
 
     return div;
@@ -150,6 +152,23 @@ export class Garage {
           color.value ='#000000'
         }
     });
+  }
+
+  public bindGenerateCars(handler: Function): void {
+    const button = <HTMLButtonElement>(
+      document.querySelector(".generate__cars")
+    );
+    button.addEventListener("click", () => {
+      const param = [];
+      for(let i = 0; i < 100; i++){
+        const name = carsNames[getRandom(0, 9)];
+        const color = getRandom(0, 999999);
+        const car = {name: name, color: '#'+ color};
+        param.push(car);
+      }
+      handler(param);
+    });
+
   }
 
   public clear(): void {
