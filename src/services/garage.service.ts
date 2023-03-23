@@ -23,4 +23,20 @@ export class GarageService {
     });
     return response.json();
   }
+
+  public async getCar(id: number): Promise<Car> {
+    const response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+      method: "GET",
+    });
+    return response.json();
+  }
+
+  public async updateCar(id: number, car: AddCar): Promise<Car> {
+    const response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+      method: "PUT",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(car),
+    });
+    return response.json();
+  }
 }

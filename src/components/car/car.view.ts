@@ -15,7 +15,7 @@ export class CarInRow {
     const div = <HTMLDivElement>document.createElement("div");
     div.innerHTML = `<div class="car__in__garage" data-id="${car.id}">
             <div>
-                <button>SELECT</button>
+                <button class="select__car">SELECT</button>
                 <button class="remove__car">REMOVE</button>
                 <span>${car.name}</span>
             </div>
