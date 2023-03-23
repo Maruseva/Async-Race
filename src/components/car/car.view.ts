@@ -1,6 +1,6 @@
 import "./car.style.css";
 import flagImg from "../../assests/img/flag.png";
-import { Car } from "../../pages/garage/garage.view";
+import { Car } from "../../types";
 
 export class CarInRow {
   private static getCarIcon(color: string): string {

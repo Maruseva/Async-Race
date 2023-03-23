@@ -1,6 +1,4 @@
-import { Car } from "../pages/garage/garage.view";
-
-export type AddCar = Omit<Car, "id">;
+import { Car, CarWithoudId } from "../types";
 
 export class GarageService {
   public async getCars(): Promise<Car[]> {
@@ -8,7 +6,7 @@ export class GarageService {
     return response.json();
   }
 
-  public async addCar(car: AddCar): Promise<Car> {
+  public async addCar(car: CarWithoudId): Promise<Car> {
     const response = await fetch("http://127.0.0.1:3000/garage", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,7 +29,7 @@ export class GarageService {
     return response.json();
   }
 
-  public async updateCar(id: number, car: AddCar): Promise<Car> {
+  public async updateCar(id: number, car: CarWithoudId): Promise<Car> {
     const response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
       method: "PUT",
       headers: { 'Content-Type': 'application/json' },

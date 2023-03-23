@@ -1,11 +1,5 @@
 import { CarInRow } from "../../components/car/car.view";
-import { GarageController } from "./garage.controller";
-
-export interface Car {
-  name: string;
-  color: string;
-  id: number;
-}
+import { Car } from "../../types";
 
 export class Garage {
   private readonly selector: string;
@@ -127,9 +121,9 @@ export class Garage {
         const div = <HTMLDivElement>(
           document.querySelector('.update'));
         const text = <HTMLInputElement>(
-          document.querySelector('.update > input[type="text"]'));
+          div.querySelector('input[type="text"]'));
         const color = <HTMLInputElement>(
-          document.querySelector('.update > input[type="color"]'));
+          div.querySelector('input[type="color"]'));
         div.setAttribute('data-id', id.toString());
         text.value = car.name;
         color.value = car.color;  
@@ -148,7 +142,7 @@ export class Garage {
           const div = <HTMLDivElement>(
             document.querySelector('.update'));
           const color = <HTMLInputElement>(
-            document.querySelector('.update > input[type="color"]'));
+            div.querySelector('input[type="color"]'));
           const id = Number(div.getAttribute("data-id"));
           const param = { name: text.value, color: color.value };
           handler(id, param);
