@@ -1,11 +1,5 @@
 import { CarInRow } from "../../components/car/car.view";
-import { GarageController } from "./garage.controller";
-
-export interface Car {
-  name: string;
-  color: string;
-  id: number;
-}
+import { Car } from "../../types";
 
 export class Garage {
   private readonly selector: string;
@@ -50,7 +44,7 @@ export class Garage {
         <input type="color">
         <button>CREATE</button>
     </div>
-    <div>
+    <div class ="update">
         <input type="text">
         <input type="color">
         <button>UPDATE</button>
@@ -80,6 +74,12 @@ export class Garage {
     return div;
   }
 
+  private getCarId(button: HTMLButtonElement): number {
+    const car = <HTMLDivElement>button.closest('.car__in__garage');
+    const id = Number(car.getAttribute('data-id'));
+    return id;
+  }
+
   public bindAddCar(handler: Function): void {
     const button = <HTMLButtonElement>(
       document.querySelector(".create > button")
@@ -105,10 +105,50 @@ export class Garage {
     garage.addEventListener("click", (event) => {
       const button = event.target as HTMLButtonElement;
       if(button.className === 'remove__car'){
-        const car = <HTMLDivElement>button.closest('.car__in__garage');
-        const id = car.getAttribute('data-id');
+        const id = this.getCarId(button);
         handler(id);
       }
+    });
+  }
+
+  public bindGetCar(handler: Function): void {
+    const garage = <HTMLDivElement>document.querySelector(".garage");
+    garage.addEventListener("click", async (event) => {
+      const button = event.target as HTMLButtonElement;
+      if(button.className === 'select__car'){
+        const id = this.getCarId(button);
+        const car = await handler(id);
+        const div = <HTMLDivElement>(
+          document.querySelector('.update'));
+        const text = <HTMLInputElement>(
+          div.querySelector('input[type="text"]'));
+        const color = <HTMLInputElement>(
+          div.querySelector('input[type="color"]'));
+        div.setAttribute('data-id', id.toString());
+        text.value = car.name;
+        color.value = car.color;  
+      }
+    });
+  }
+
+  public bindUpdateCar(handler: Function): void {
+    const button = <HTMLButtonElement>(
+      document.querySelector(".update > button")
+    );
+    button.addEventListener("click", () => {
+      const text = <HTMLInputElement>(
+        document.querySelector('.update > input[type="text"]'));
+        if (text.value) {
+          const div = <HTMLDivElement>(
+            document.querySelector('.update'));
+          const color = <HTMLInputElement>(
+            div.querySelector('input[type="color"]'));
+          const id = Number(div.getAttribute("data-id"));
+          const param = { name: text.value, color: color.value };
+          handler(id, param);
+          text.value = '';
+          color.value ='#000000'
+        }
     });
   }
 

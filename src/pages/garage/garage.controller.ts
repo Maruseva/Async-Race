@@ -1,4 +1,5 @@
-import { AddCar, GarageService } from "../../services/garage.service";
+import { GarageService } from "../../services/garage.service";
+import { Car, CarWithoudId } from "../../types";
 import { Garage } from "./garage.view";
 
 export class GarageController {
@@ -14,7 +15,7 @@ export class GarageController {
     this.garage.render(response);
   }
 
-  private async addCar(car: AddCar): Promise<void> {
+  private async addCar(car: CarWithoudId): Promise<void> {
     await this.service.addCar(car);
     const response = await this.service.getCars();
     this.garage.clear();
@@ -28,8 +29,22 @@ export class GarageController {
     this.garage.renderCars(response);
   }
 
+  private async getCar(id: number): Promise<Car> {
+    const response = await this.service.getCar(id);
+    return response;
+  }
+
+  private async updateCar(id: number, car: CarWithoudId): Promise<void> {
+    await this.service.updateCar(id, car);
+    const response = await this.service.getCars();
+    this.garage.clear();
+    this.garage.renderCars(response);
+  }
+
   public init(): void {
     this.garage.bindAddCar(this.addCar.bind(this));
     this.garage.bindDeleteCar(this.deleteCar.bind(this));
+    this.garage.bindGetCar(this.getCar.bind(this));
+    this.garage.bindUpdateCar(this.updateCar.bind(this));
   }
 }
