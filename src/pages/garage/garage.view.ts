@@ -16,6 +16,8 @@ export class Garage {
   public render(cars: Car[]): void {
     const root = <HTMLDivElement>document.querySelector(this.selector);
     const div = <HTMLDivElement>document.createElement("div");
+    const garage = <HTMLDivElement>document.createElement("div");
+    garage.className = 'garage';
 
     const control = this.getControl();
     div.appendChild(control);
@@ -23,16 +25,24 @@ export class Garage {
     const title = this.getTitle();
     div.appendChild(title);
 
-    cars.forEach((element) => {
-      const carInRow = CarInRow.render(element);
-      div.appendChild(carInRow);
-    });
+    div.appendChild(garage);
 
     const pagination = this.getPagination();
     div.appendChild(pagination);
 
     root.appendChild(div);
+    this.renderCars(cars);
   }
+
+  public renderCars(cars: Car[]): void {
+    const garage = <HTMLDivElement>document.querySelector(".garage");
+    cars.forEach((element) => {
+      const carInRow = CarInRow.render(element);
+      garage.appendChild(carInRow);
+    });
+
+  }
+
   private getControl(): Element {
     const div = <HTMLDivElement>document.createElement("div");
     div.innerHTML = `<div class="create">
@@ -84,12 +94,26 @@ export class Garage {
         );
         const param = { name: text.value, color: color.value };
         handler(param);
+        text.value = '';
+        color.value ='#000000'
+      }
+    });
+  }
+
+  public bindDeleteCar(handler: Function): void {
+    const garage = <HTMLDivElement>document.querySelector(".garage");
+    garage.addEventListener("click", (event) => {
+      const button = event.target as HTMLButtonElement;
+      if(button.className === 'remove__car'){
+        const car = <HTMLDivElement>button.closest('.car__in__garage');
+        const id = car.getAttribute('data-id');
+        handler(id);
       }
     });
   }
 
   public clear(): void {
-    const root = <HTMLDivElement>document.querySelector(this.selector);
-    root.innerHTML = '';
+    const garage = <HTMLDivElement>document.querySelector(".garage");
+    garage.innerHTML = '';
   }
 }

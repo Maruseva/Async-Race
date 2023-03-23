@@ -13,10 +13,10 @@ export class CarInRow {
 
   public static render(car: Car): Element {
     const div = <HTMLDivElement>document.createElement("div");
-    div.innerHTML = `<div>
+    div.innerHTML = `<div class="car__in__garage" data-id="${car.id}">
             <div>
                 <button>SELECT</button>
-                <button>REMOVE</button>
+                <button class="remove__car">REMOVE</button>
                 <span>${car.name}</span>
             </div>
             <div class="car__item">

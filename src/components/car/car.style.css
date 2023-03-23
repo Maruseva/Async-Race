@@ -14,3 +14,8 @@
     position: absolute;
     right: 100px;
 }
+
+button {
+    position: relative;
+    z-index: 1;
+}
