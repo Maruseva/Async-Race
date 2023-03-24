@@ -160,9 +160,11 @@ export class Garage {
     );
     button.addEventListener("click", () => {
       const param = [];
-      for(let i = 0; i < 100; i++){
-        const name = carsNames[getRandom(0, 9)];
-        const color = getRandom(0, 999999);
+      const numberCars = 100;
+      const numberColors = 999999;
+      for(let i = 0; i < numberCars; i++){
+        const name = carsNames[getRandom(0, carsNames.length - 1)];
+        const color = getRandom(0, numberColors);
         const car = {name: name, color: '#'+ color};
         param.push(car);
       }
