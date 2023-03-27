@@ -10,10 +10,3 @@ export interface Car {
     cars: Car[];
     count: number
   }
-
-  export interface GarageInfo {
-    spanCount: HTMLSpanElement;
-    spanPage: HTMLSpanElement;
-    count: number;
-    page: number
-  }
