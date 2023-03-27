@@ -1,6 +1,6 @@
 import { carsNames } from "../../assests/data/data";
 import { CarInRow } from "../../components/car/car.view";
-import { Car } from "../../types";
+import { Car, GarageInfo } from "../../types";
 import { getRandom } from "../../utils/utils";
 
 export class Garage {
@@ -9,7 +9,7 @@ export class Garage {
     this.selector = selector;
   }
 
-  public render(cars: Car[]): void {
+  public render(cars: Car[], count: number, page: number): void {
     const root = <HTMLDivElement>document.querySelector(this.selector);
     const div = <HTMLDivElement>document.createElement("div");
     const garage = <HTMLDivElement>document.createElement("div");
@@ -18,7 +18,7 @@ export class Garage {
     const control = this.getControl();
     div.appendChild(control);
 
-    const title = this.getTitle();
+    const title = this.getTitle(count, page);
     div.appendChild(title);
 
     div.appendChild(garage);
@@ -60,19 +60,20 @@ export class Garage {
     return div;
   }
 
-  private getTitle(): Element {
+  private getTitle(count: number, page: number): Element {
     const div = <HTMLDivElement>document.createElement("div");
     div.innerHTML = `
-      <h3>Garage</h3>
-      <span>Page #</span>`;
+      <h3>Garage <span class="garage__count">${count}</span></h3>
+      <span>Page #<span class="garage__page">${page}</span></span>`;
     return div;
   }
 
   private getPagination(): Element {
     const div = <HTMLDivElement>document.createElement("div");
+    div.className = "garage__pagination";
     div.innerHTML = `
-      <button>PREV</button>
-      <button>NEXT</button>`;
+      <button class="garage__prev">PREV</button>
+      <button class="garage__next">NEXT</button>`;
     return div;
   }
 
@@ -80,6 +81,14 @@ export class Garage {
     const car = <HTMLDivElement>button.closest('.car__in__garage');
     const id = Number(car.getAttribute('data-id'));
     return id;
+  }
+
+  private getPageAndCountCars(): GarageInfo {
+    const spanCount = <HTMLSpanElement>document.querySelector(".garage__count");
+    const spanPage = <HTMLSpanElement>document.querySelector(".garage__page");
+    const count = Number(spanCount.innerText);
+    const page = Number(spanPage.innerText);
+    return {spanCount, spanPage, count, page}
   }
 
   public bindAddCar(handler: Function): void {
@@ -95,7 +104,9 @@ export class Garage {
           document.querySelector('.create > input[type="color"]')
         );
         const param = { name: text.value, color: color.value };
-        handler(param);
+        const garageInfo = this.getPageAndCountCars();
+        garageInfo.spanCount.innerText = `${garageInfo.count+1}`;
+        handler(param, garageInfo.page);
         text.value = '';
         color.value ='#000000'
       }
@@ -108,7 +119,9 @@ export class Garage {
       const button = event.target as HTMLButtonElement;
       if(button.className === 'remove__car'){
         const id = this.getCarId(button);
-        handler(id);
+        const garageInfo = this.getPageAndCountCars();
+        garageInfo.spanCount.innerText = `${garageInfo.count-1}`;
+        handler(id, garageInfo.page);
       }
     });
   }
@@ -147,7 +160,8 @@ export class Garage {
             div.querySelector('input[type="color"]'));
           const id = Number(div.getAttribute("data-id"));
           const param = { name: text.value, color: color.value };
-          handler(id, param);
+          const garageInfo = this.getPageAndCountCars();
+          handler(id, param, garageInfo.page);
           text.value = '';
           color.value ='#000000'
         }
@@ -168,9 +182,33 @@ export class Garage {
         const car = {name: name, color: '#'+ color};
         param.push(car);
       }
-      handler(param);
+      const garageInfo = this.getPageAndCountCars();
+      garageInfo.spanCount.innerText = `${garageInfo.count+numberCars}`;
+      handler(param, garageInfo.page);
     });
 
+  }
+
+  public bindSetPage(handler: Function): void {
+    const buttons = <HTMLDivElement>(
+      document.querySelector(".garage__pagination")
+    );
+    buttons.addEventListener("click", (event) => {
+      const button = event.target as HTMLButtonElement;
+      if(button.className === 'garage__prev'){
+        const garageInfo = this.getPageAndCountCars();
+        if(garageInfo.page > 1) {
+          garageInfo.spanPage.innerText = `${garageInfo.page-1}`;
+          handler(garageInfo.page-1);
+        }
+      } else if(button.className === 'garage__next'){
+        const garageInfo = this.getPageAndCountCars();
+        if(garageInfo.page < garageInfo.count / 7) {
+          garageInfo.spanPage.innerText = `${garageInfo.page+1}`;
+          handler(garageInfo.page+1);
+        }
+      }
+    })
   }
 
   public clear(): void {

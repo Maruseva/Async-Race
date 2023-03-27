@@ -1,9 +1,14 @@
-import { Car, CarWithoudId } from "../types";
+import { Car, CarWithoudId, CarsPage } from "../types";
 
 export class GarageService {
-  public async getCars(): Promise<Car[]> {
-    const response = await fetch("http://127.0.0.1:3000/garage");
-    return response.json();
+  public async getCars(page: number = 1): Promise<CarsPage> {
+    const response = await fetch(`http://127.0.0.1:3000/garage/?_page=${page}&_limit=7`, {
+      method: "GET",
+    });
+    const cars = await response.json();
+    const count = Number(response.headers.get("X-Total-Count"));
+    const value = {cars, count};
+    return value;
   }
 
   public async addCar(car: CarWithoudId): Promise<Car> {

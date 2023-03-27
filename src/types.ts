@@ -5,3 +5,15 @@ export interface Car {
   }
 
   export type CarWithoudId = Omit<Car, "id">;
+
+  export interface CarsPage {
+    cars: Car[];
+    count: number
+  }
+
+  export interface GarageInfo {
+    spanCount: HTMLSpanElement;
+    spanPage: HTMLSpanElement;
+    count: number;
+    page: number
+  }
