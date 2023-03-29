@@ -88,19 +88,23 @@ export class Garage {
         return id;
     }
 
-    private moveCar(id: number, move: CarMove): void {
+    private moveCar(id: number, move: CarMove, getter: Function): void {
+        const indentRight = 120;
         const divCar = <HTMLDivElement>document.querySelector(`div[data-id="${id}"]`);
         const car = <SVGElement>divCar.querySelector('svg');
         let leftX = car.getBoundingClientRect().left + window.scrollX;
-        const distance = window.innerWidth - leftX - 120;
+        const distance = window.innerWidth - leftX - indentRight;
         const speed = (distance / move.distance) * move.velocity * 60;
         function animation(): void {
-            if (leftX <  window.innerWidth - 120) {
+            const state = getter(id);
+            if (state === "start" && leftX <  window.innerWidth - indentRight) {
                 window.requestAnimationFrame(() => {
                     leftX = leftX + speed;
                     car.style.left = leftX.toString();
                     animation();
                 });
+            } else if (state === "stop") {
+                car.style.left = "";
             }
         }
         animation();
@@ -200,14 +204,14 @@ export class Garage {
         });
     }
 
-    public bindStartCar(handler: Function): void {
+    public bindStartCar(handler: Function, getter: Function): void {
         const garage = <HTMLDivElement>document.querySelector('.garage');
         garage.addEventListener('click', async (event) => {
             const button = event.target as HTMLButtonElement;
             if (button.className === 'start__car') {
                 const id = this.getCarId(button);
                 const move = await handler(id);
-                this.moveCar(id, move);
+                this.moveCar(id, move, getter);
                 button.disabled = true;
             }
         });

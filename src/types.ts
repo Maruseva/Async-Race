@@ -16,7 +16,7 @@ export interface CarMove {
     distance: number;
 }
 
-export interface DataCars {
+export interface CarsEngine {
     id: number;
     state: 'start' | 'stop';
 }

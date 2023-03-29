@@ -1,36 +1,39 @@
 import { countCars } from '../../constants';
 import { GarageService } from '../../services/garage.service';
-import { Car, CarMove, CarWithoudId, DataCars } from '../../types';
+import { Car, CarMove, CarWithoudId, CarsEngine } from '../../types';
 import { Garage } from './garage.view';
 
 export class GarageController {
     private garage: Garage;
     private service: GarageService;
     private page: number;
-    private dataCars: DataCars[];
+    private сarsEngine: CarsEngine[];
     constructor(garage: Garage, sevice: GarageService) {
         this.garage = garage;
         this.service = sevice;
         this.page = 1;
-        this.dataCars = [];
+        this.сarsEngine = [];
     }
 
     public async render(): Promise<void> {
         const response = await this.service.getCars(this.page);
-        this.dataCars = response.cars.map((element) => {
-            return { id: element.id, state: 'stop' };
-        });
         this.garage.render(response.cars, response.count, this.page);
+        this.setCarsEngine();
     }
 
     private async updateGarage(): Promise<void> {
         const response = await this.service.getCars(this.page);
-        this.dataCars = response.cars.map((element) => {
-            return { id: element.id, state: 'stop' };
-        });
         this.garage.clear();
         this.garage.renderCars(response.cars);
         this.garage.updateTitle(response.count, this.page);
+        this.setCarsEngine();
+    }
+
+    private async setCarsEngine(): Promise<void> {
+        const response = await this.service.getCars(this.page);
+        this.сarsEngine = response.cars.map((element) => {
+            return { id: element.id, state: 'stop' };
+        });
     }
 
     private async addCar(car: CarWithoudId): Promise<void> {
@@ -74,19 +77,24 @@ export class GarageController {
     }
 
     private async startCar(id: number): Promise<CarMove> {
-        const dataCar = this.dataCars.find((element) => element.id === id);
-        if(dataCar) {
-            dataCar.state = "start";
+        const dataCar = this.сarsEngine.find((element) => element.id === id);
+        if (dataCar) {
+            dataCar.state = 'start';
         }
         const response = await this.service.startCar(id);
         return response;
     }
 
     private stopCar(id: number): void {
-        const dataCar = this.dataCars.find((element) => element.id === id);
-        if(dataCar) {
-            dataCar.state = "stop";
+        const dataCar = this.сarsEngine.find((element) => element.id === id);
+        if (dataCar) {
+            dataCar.state = 'stop';
         }
+    }
+
+    private getEngineState(id: number): string | undefined {
+        const dataCar = this.сarsEngine.find((element) => element.id === id);
+        return dataCar?.state;
     }
 
     public init(): void {
@@ -97,7 +105,7 @@ export class GarageController {
         this.garage.bindGenerateCars(this.generateCars.bind(this));
         this.garage.bindSetPrevPage(this.setPrevPage.bind(this));
         this.garage.bindSetNextPage(this.setNextPage.bind(this));
-        this.garage.bindStartCar(this.startCar.bind(this));
+        this.garage.bindStartCar(this.startCar.bind(this), this.getEngineState.bind(this));
         this.garage.bindStopCar(this.stopCar.bind(this));
     }
 }
