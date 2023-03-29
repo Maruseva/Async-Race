@@ -1,7 +1,7 @@
-import { GarageController } from "../../pages/garage/garage.controller";
-import { Garage } from "../../pages/garage/garage.view";
-import { GarageService } from "../../services/garage.service";
-import { Header } from "../header/header.view";
+import { GarageController } from '../../pages/garage/garage.controller';
+import { Garage } from '../../pages/garage/garage.view';
+import { GarageService } from '../../services/garage.service';
+import { Header } from '../header/header.view';
 
 export class App {
     private readonly selector: string;
