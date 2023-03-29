@@ -1,25 +1,33 @@
 import { countCars } from '../../constants';
 import { GarageService } from '../../services/garage.service';
-import { Car, CarWithoudId } from '../../types';
+import { Car, CarMove, CarWithoudId, DataCars } from '../../types';
 import { Garage } from './garage.view';
 
 export class GarageController {
     private garage: Garage;
     private service: GarageService;
     private page: number;
+    private dataCars: DataCars[];
     constructor(garage: Garage, sevice: GarageService) {
         this.garage = garage;
         this.service = sevice;
         this.page = 1;
+        this.dataCars = [];
     }
 
     public async render(): Promise<void> {
         const response = await this.service.getCars(this.page);
+        this.dataCars = response.cars.map((element) => {
+            return { id: element.id, state: 'stop' };
+        });
         this.garage.render(response.cars, response.count, this.page);
     }
 
     private async updateGarage(): Promise<void> {
         const response = await this.service.getCars(this.page);
+        this.dataCars = response.cars.map((element) => {
+            return { id: element.id, state: 'stop' };
+        });
         this.garage.clear();
         this.garage.renderCars(response.cars);
         this.garage.updateTitle(response.count, this.page);
@@ -65,6 +73,22 @@ export class GarageController {
         }
     }
 
+    private async startCar(id: number): Promise<CarMove> {
+        const dataCar = this.dataCars.find((element) => element.id === id);
+        if(dataCar) {
+            dataCar.state = "start";
+        }
+        const response = await this.service.startCar(id);
+        return response;
+    }
+
+    private stopCar(id: number): void {
+        const dataCar = this.dataCars.find((element) => element.id === id);
+        if(dataCar) {
+            dataCar.state = "stop";
+        }
+    }
+
     public init(): void {
         this.garage.bindAddCar(this.addCar.bind(this));
         this.garage.bindDeleteCar(this.deleteCar.bind(this));
@@ -73,5 +97,7 @@ export class GarageController {
         this.garage.bindGenerateCars(this.generateCars.bind(this));
         this.garage.bindSetPrevPage(this.setPrevPage.bind(this));
         this.garage.bindSetNextPage(this.setNextPage.bind(this));
+        this.garage.bindStartCar(this.startCar.bind(this));
+        this.garage.bindStopCar(this.stopCar.bind(this));
     }
 }

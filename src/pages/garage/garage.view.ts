@@ -1,6 +1,6 @@
 import { carsNames } from '../../assests/data/data';
 import { CarInRow } from '../../components/car/car.view';
-import { Car } from '../../types';
+import { Car, CarMove } from '../../types';
 import { getRandom } from '../../utils/utils';
 
 export class Garage {
@@ -88,6 +88,30 @@ export class Garage {
         return id;
     }
 
+    private moveCar(id: number, move: CarMove): void {
+        const divCar = <HTMLDivElement>document.querySelector(`div[data-id="${id}"]`);
+        const car = <SVGElement>divCar.querySelector('svg');
+        let leftX = car.getBoundingClientRect().left + window.scrollX;
+        const distance = window.innerWidth - leftX - 120;
+        const speed = (distance / move.distance) * move.velocity * 60;
+        function animation(): void {
+            if (leftX <  window.innerWidth - 120) {
+                window.requestAnimationFrame(() => {
+                    leftX = leftX + speed;
+                    car.style.left = leftX.toString();
+                    animation();
+                });
+            }
+        }
+        animation();
+    }
+
+    private stopCar(id: number): void {
+        const divCar = <HTMLDivElement>document.querySelector(`div[data-id="${id}"]`);
+        const car = <SVGElement>divCar.querySelector('svg');
+        car.style.left = "";
+    }
+
     public bindAddCar(handler: Function): void {
         const button = <HTMLButtonElement>document.querySelector('.create > button');
         button.addEventListener('click', () => {
@@ -173,6 +197,33 @@ export class Garage {
         const button = <HTMLButtonElement>document.querySelector('.garage__next');
         button.addEventListener('click', () => {
             handler();
+        });
+    }
+
+    public bindStartCar(handler: Function): void {
+        const garage = <HTMLDivElement>document.querySelector('.garage');
+        garage.addEventListener('click', async (event) => {
+            const button = event.target as HTMLButtonElement;
+            if (button.className === 'start__car') {
+                const id = this.getCarId(button);
+                const move = await handler(id);
+                this.moveCar(id, move);
+                button.disabled = true;
+            }
+        });
+    }
+
+    public bindStopCar(handler: Function): void {
+        const garage = <HTMLDivElement>document.querySelector('.garage');
+        garage.addEventListener('click', (event) => {
+            const buttonStop = event.target as HTMLButtonElement;
+            if (buttonStop.className === 'stop__car') {
+                const id = this.getCarId(buttonStop);
+                handler(id);
+                this.stopCar(id);
+                const buttonStart = <HTMLButtonElement>buttonStop.previousElementSibling;
+                buttonStart.disabled = false;
+            }
         });
     }
 

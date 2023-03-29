@@ -10,3 +10,13 @@ export interface CarsPage {
     cars: Car[];
     count: number;
 }
+
+export interface CarMove {
+    velocity: number;
+    distance: number;
+}
+
+export interface DataCars {
+    id: number;
+    state: 'start' | 'stop';
+}
