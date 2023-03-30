@@ -18,7 +18,7 @@ export class GarageController {
     public async render(): Promise<void> {
         const response = await this.service.getCars(this.page);
         this.garage.render(response.cars, response.count, this.page);
-        this.setCarsEngine();
+        this.setCarsEngine(response.cars);
     }
 
     private async updateGarage(): Promise<void> {
@@ -26,12 +26,11 @@ export class GarageController {
         this.garage.clear();
         this.garage.renderCars(response.cars);
         this.garage.updateTitle(response.count, this.page);
-        this.setCarsEngine();
+        this.setCarsEngine(response.cars);
     }
 
-    private async setCarsEngine(): Promise<void> {
-        const response = await this.service.getCars(this.page);
-        this.сarsEngine = response.cars.map((element) => {
+    private setCarsEngine(cars: Car[]): void {
+        this.сarsEngine = cars.map((element) => {
             return { id: element.id, state: 'stop' };
         });
     }
@@ -77,15 +76,16 @@ export class GarageController {
     }
 
     private async startCar(id: number): Promise<CarMove> {
+        const response = await this.service.startCar(id);
         const dataCar = this.сarsEngine.find((element) => element.id === id);
         if (dataCar) {
             dataCar.state = 'start';
         }
-        const response = await this.service.startCar(id);
         return response;
     }
 
     private stopCar(id: number): void {
+        this.service.stopCar(id);
         const dataCar = this.сarsEngine.find((element) => element.id === id);
         if (dataCar) {
             dataCar.state = 'stop';
