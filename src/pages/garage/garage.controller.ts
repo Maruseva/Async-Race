@@ -84,8 +84,8 @@ export class GarageController {
         return response;
     }
 
-    private stopCar(id: number): void {
-        this.service.stopCar(id);
+    private async stopCar(id: number): Promise<void> {
+        await this.service.stopCar(id);
         const dataCar = this.сarsEngine.find((element) => element.id === id);
         if (dataCar) {
             dataCar.state = 'stop';
