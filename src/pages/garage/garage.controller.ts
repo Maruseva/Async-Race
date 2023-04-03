@@ -97,6 +97,11 @@ export class GarageController {
         return dataCar?.state;
     }
 
+    private async driveCar(id: number): Promise<boolean | void> {
+        const response = await this.service.driveCar(id);
+        if (response) return response;
+    }
+
     public init(): void {
         this.garage.bindAddCar(this.addCar.bind(this));
         this.garage.bindDeleteCar(this.deleteCar.bind(this));
@@ -105,7 +110,7 @@ export class GarageController {
         this.garage.bindGenerateCars(this.generateCars.bind(this));
         this.garage.bindSetPrevPage(this.setPrevPage.bind(this));
         this.garage.bindSetNextPage(this.setNextPage.bind(this));
-        this.garage.bindStartCar(this.startCar.bind(this), this.getEngineState.bind(this));
+        this.garage.bindStartCar(this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
         this.garage.bindStopCar(this.stopCar.bind(this));
     }
 }
