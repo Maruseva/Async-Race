@@ -20,8 +20,8 @@ export class CarInRow {
                 <span>${car.name}</span>
             </div>
             <div class="car__item">
-                <button>A</button>
-                <button>B</button>
+                <button class="start__car">A</button>
+                <button class="stop__car">B</button>
                     ${this.getCarIcon(car.color)}
                 <img src="${flagImg}" alt="flag" class="car__flagImg">
             </div>

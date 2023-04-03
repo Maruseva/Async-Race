@@ -1,21 +1,24 @@
 import { countCars } from '../../constants';
 import { GarageService } from '../../services/garage.service';
-import { Car, CarWithoudId } from '../../types';
+import { Car, CarMove, CarWithoudId, CarsEngine } from '../../types';
 import { Garage } from './garage.view';
 
 export class GarageController {
     private garage: Garage;
     private service: GarageService;
     private page: number;
+    private сarsEngine: CarsEngine[];
     constructor(garage: Garage, sevice: GarageService) {
         this.garage = garage;
         this.service = sevice;
         this.page = 1;
+        this.сarsEngine = [];
     }
 
     public async render(): Promise<void> {
         const response = await this.service.getCars(this.page);
         this.garage.render(response.cars, response.count, this.page);
+        this.setCarsEngine(response.cars);
     }
 
     private async updateGarage(): Promise<void> {
@@ -23,6 +26,13 @@ export class GarageController {
         this.garage.clear();
         this.garage.renderCars(response.cars);
         this.garage.updateTitle(response.count, this.page);
+        this.setCarsEngine(response.cars);
+    }
+
+    private setCarsEngine(cars: Car[]): void {
+        this.сarsEngine = cars.map((element) => {
+            return { id: element.id, state: 'stop' };
+        });
     }
 
     private async addCar(car: CarWithoudId): Promise<void> {
@@ -65,6 +75,28 @@ export class GarageController {
         }
     }
 
+    private async startCar(id: number): Promise<CarMove> {
+        const response = await this.service.startCar(id);
+        const dataCar = this.сarsEngine.find((element) => element.id === id);
+        if (dataCar) {
+            dataCar.state = 'start';
+        }
+        return response;
+    }
+
+    private async stopCar(id: number): Promise<void> {
+        await this.service.stopCar(id);
+        const dataCar = this.сarsEngine.find((element) => element.id === id);
+        if (dataCar) {
+            dataCar.state = 'stop';
+        }
+    }
+
+    private getEngineState(id: number): string | undefined {
+        const dataCar = this.сarsEngine.find((element) => element.id === id);
+        return dataCar?.state;
+    }
+
     public init(): void {
         this.garage.bindAddCar(this.addCar.bind(this));
         this.garage.bindDeleteCar(this.deleteCar.bind(this));
@@ -73,5 +105,7 @@ export class GarageController {
         this.garage.bindGenerateCars(this.generateCars.bind(this));
         this.garage.bindSetPrevPage(this.setPrevPage.bind(this));
         this.garage.bindSetNextPage(this.setNextPage.bind(this));
+        this.garage.bindStartCar(this.startCar.bind(this), this.getEngineState.bind(this));
+        this.garage.bindStopCar(this.stopCar.bind(this));
     }
 }

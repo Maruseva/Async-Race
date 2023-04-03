@@ -1,5 +1,5 @@
 import { countCars } from '../constants';
-import { Car, CarWithoudId, CarsPage } from '../types';
+import { Car, CarWithoudId, CarsPage, CarMove } from '../types';
 
 export class GarageService {
     public async getCars(page: number = 1): Promise<CarsPage> {
@@ -40,6 +40,20 @@ export class GarageService {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(car),
+        });
+        return response.json();
+    }
+
+    public async startCar(id: number): Promise<CarMove> {
+        const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=started`, {
+            method: 'PATCH',
+        });
+        return response.json();
+    }
+
+    public async stopCar(id: number): Promise<CarMove> {
+        const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=stopped`, {
+            method: 'PATCH',
         });
         return response.json();
     }
