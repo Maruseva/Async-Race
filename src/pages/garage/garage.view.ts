@@ -117,15 +117,6 @@ export class Garage {
         car.style.left = '';
     }
 
-    private breakingCar(id: number): void {
-        console.log(0)
-        const divCar = <HTMLDivElement>document.querySelector(`div[data-id="${id}"]`);
-        const car = <SVGElement>divCar.querySelector('svg');
-        // const leftX = car.getBoundingClientRect().left + window.scrollX;
-        // car.style.left = leftX.toString();
-        car.style.left = '';
-    }
-
     public bindAddCar(handler: Function): void {
         const button = <HTMLButtonElement>document.querySelector('.create > button');
         button.addEventListener('click', () => {
@@ -224,8 +215,6 @@ export class Garage {
                 this.moveCar(id, move, getter);
                 button.disabled = true;
                 const breaking = await handlerDrive(id);
-                if (breaking) {
-                    this.breakingCar(id);}
             }
         });
     }

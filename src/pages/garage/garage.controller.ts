@@ -97,9 +97,14 @@ export class GarageController {
         return dataCar?.state;
     }
 
-    private async driveCar(id: number): Promise<boolean | void> {
+    private async driveCar(id: number): Promise<void> {
         const response = await this.service.driveCar(id);
-        if (response) return response;
+        if (response) {
+            const dataCar = this.сarsEngine.find((element) => element.id === id);
+            if (dataCar) {
+                dataCar.state = 'breack';
+            }
+        }
     }
 
     public init(): void {
