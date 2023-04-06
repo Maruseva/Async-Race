@@ -22,6 +22,11 @@ export class GarageController {
         this.setCarsEngine(response.cars);
     }
 
+    private async getCars(): Promise<Car[]> {
+        const response = await this.service.getCars(this.page);
+        return response.cars;
+    }
+
     private async updateGarage(): Promise<void> {
         const response = await this.service.getCars(this.page);
         this.garage.clear();
@@ -123,5 +128,6 @@ export class GarageController {
         this.garage.bindSetNextPage(this.setNextPage.bind(this));
         this.garage.bindStartCar(this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
         this.garage.bindStopCar(this.stopCar.bind(this));
+        this.garage.bindStartAllCars(this.getCars.bind(this), this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
     }
 }

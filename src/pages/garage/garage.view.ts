@@ -58,7 +58,7 @@ export class Garage {
         <button>UPDATE</button>
     </div>
     <div>
-        <button>RACE</button>
+        <button class="race">RACE</button>
         <button>RESET</button>
         <button class="generate__cars">GENERATE CARS</button>
     </div>`;
@@ -88,7 +88,8 @@ export class Garage {
         return id;
     }
 
-    private moveCar(id: number, move: CarMove, getter: Function): void {
+    private async moveCar(id: number, handlerStart: Function, handlerDrive: Function, getter: Function): Promise<void> {
+        const move = await handlerStart(id);
         const indentRight = 120;
         const k = 1000 / 60; //* 1000ms / car flashes 60 times per second *//
         const divCar = <HTMLDivElement>document.querySelector(`div[data-id="${id}"]`);
@@ -96,6 +97,7 @@ export class Garage {
         let leftX = car.getBoundingClientRect().left + window.scrollX;
         const distance = window.innerWidth - leftX - indentRight;
         const speed = (distance / (move.distance / move.velocity)) * k;
+        handlerDrive(id);
         function animation(): void {
             const state = getter(id);
             if (state === 'start' && leftX < window.innerWidth - indentRight) {
@@ -207,14 +209,12 @@ export class Garage {
 
     public bindStartCar(handlerStart: Function, handlerDrive: Function, getter: Function): void {
         const garage = <HTMLDivElement>document.querySelector('.garage');
-        garage.addEventListener('click', async (event) => {
+        garage.addEventListener('click', (event) => {
             const button = event.target as HTMLButtonElement;
             if (button.className === 'start__car') {
                 const id = this.getCarId(button);
-                const move = await handlerStart(id);
-                this.moveCar(id, move, getter);
+                this.moveCar(id, handlerStart, handlerDrive, getter);
                 button.disabled = true;
-                await handlerDrive(id);
             }
         });
     }
@@ -230,6 +230,24 @@ export class Garage {
                 const buttonStart = <HTMLButtonElement>buttonStop.previousElementSibling;
                 buttonStart.disabled = false;
             }
+        });
+    }
+
+    public bindStartAllCars(
+        getterCars: Function,
+        handlerStart: Function,
+        handlerDrive: Function,
+        getterState: Function
+    ): void {
+        const race = <HTMLButtonElement>document.querySelector('.race');
+        race.addEventListener('click', async () => {
+            const cars = await getterCars();
+            for (let i = 0; cars.length > i; i++) {
+                this.moveCar(cars[i].id, handlerStart, handlerDrive, getterState);
+            }
+            race.disabled = true;
+            const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
+            buttons.forEach((button) => (button.disabled = true));
         });
     }
 
