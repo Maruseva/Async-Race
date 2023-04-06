@@ -241,10 +241,8 @@ export class Garage {
     ): void {
         const race = <HTMLButtonElement>document.querySelector('.race');
         race.addEventListener('click', async () => {
-            const cars = await getterCars();
-            for (let i = 0; cars.length > i; i++) {
-                this.moveCar(cars[i].id, handlerStart, handlerDrive, getterState);
-            }
+            const cars: Car[] = await getterCars();
+            cars.forEach(element => this.moveCar(element.id, handlerStart, handlerDrive, getterState));
             race.disabled = true;
             const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
             buttons.forEach((button) => (button.disabled = true));
