@@ -214,18 +214,18 @@ export class Garage {
                 const move = await handlerStart(id);
                 this.moveCar(id, move, getter);
                 button.disabled = true;
-                const breaking = await handlerDrive(id);
+                await handlerDrive(id);
             }
         });
     }
 
     public bindStopCar(handler: Function): void {
         const garage = <HTMLDivElement>document.querySelector('.garage');
-        garage.addEventListener('click', (event) => {
+        garage.addEventListener('click', async (event) => {
             const buttonStop = event.target as HTMLButtonElement;
             if (buttonStop.className === 'stop__car') {
                 const id = this.getCarId(buttonStop);
-                handler(id);
+                await handler(id);
                 this.stopCar(id);
                 const buttonStart = <HTMLButtonElement>buttonStop.previousElementSibling;
                 buttonStart.disabled = false;

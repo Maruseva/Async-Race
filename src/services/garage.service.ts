@@ -1,4 +1,5 @@
 import { countCars } from '../constants';
+import { EngineError } from '../error/engineError';
 import { Car, CarWithoudId, CarsPage, CarMove } from '../types';
 
 export class GarageService {
@@ -58,12 +59,17 @@ export class GarageService {
         return response.json();
     }
 
-    public async driveCar(id: number): Promise<boolean | void> {
+    public async driveCar(
+        id: number
+    ): Promise<{
+        success: true;
+    }> {
         const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=drive`, {
             method: 'PATCH',
         });
         if (response.status === 500) {
-            return true;
+            throw new EngineError(`${response.statusText} ${response.url}`);
         }
+        return response.json();
     }
 }

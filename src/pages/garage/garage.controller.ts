@@ -1,4 +1,5 @@
 import { countCars } from '../../constants';
+import { EngineError } from '../../error/engineError';
 import { GarageService } from '../../services/garage.service';
 import { Car, CarMove, CarWithoudId, CarsEngine } from '../../types';
 import { Garage } from './garage.view';
@@ -98,11 +99,16 @@ export class GarageController {
     }
 
     private async driveCar(id: number): Promise<void> {
-        const response = await this.service.driveCar(id);
-        if (response) {
-            const dataCar = this.сarsEngine.find((element) => element.id === id);
-            if (dataCar) {
-                dataCar.state = 'breack';
+        try {
+            await this.service.driveCar(id);
+        } catch (err: unknown) {
+            if (err instanceof EngineError) {
+                const dataCar = this.сarsEngine.find((element) => element.id === id);
+                if (dataCar) {
+                    dataCar.state = 'break';
+                }
+            } else {
+                throw err;
             }
         }
     }
