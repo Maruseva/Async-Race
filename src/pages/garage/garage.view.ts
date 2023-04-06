@@ -59,7 +59,7 @@ export class Garage {
     </div>
     <div>
         <button class="race">RACE</button>
-        <button>RESET</button>
+        <button class="reset">RESET</button>
         <button class="generate__cars">GENERATE CARS</button>
     </div>`;
 
@@ -247,6 +247,18 @@ export class Garage {
             const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
             buttons.forEach((button) => (button.disabled = true));
         });
+    }
+
+    public bindReset(getter: Function): void {
+        const reset = <HTMLButtonElement>document.querySelector('.reset');
+        reset.addEventListener('click', async () => {
+            const cars: Car[] = await getter();
+            cars.forEach(element => this.stopCar(element.id));
+            const race = <HTMLButtonElement>document.querySelector('.race');
+            race.disabled = false;
+            const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
+            buttons.forEach((button) => (button.disabled = false));
+        })
     }
 
     public clear(): void {

@@ -129,5 +129,6 @@ export class GarageController {
         this.garage.bindStartCar(this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
         this.garage.bindStopCar(this.stopCar.bind(this));
         this.garage.bindStartAllCars(this.getCars.bind(this), this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
+        this.garage.bindReset(this.getCars.bind(this));
     }
 }
