@@ -1,6 +1,6 @@
 import { carsNames } from '../../assests/data/data';
 import { CarInRow } from '../../components/car/car.view';
-import { Car, CarMove } from '../../types';
+import { Car } from '../../types';
 import { getRandom } from '../../utils/utils';
 
 export class Garage {
@@ -88,7 +88,7 @@ export class Garage {
         return id;
     }
 
-    private async moveCar(id: number, handlerStart: Function, handlerDrive: Function, getter: Function): Promise<void> {
+    private async moveCar(id: number, handlerStart: Function, getter: Function): Promise<void> {
         const move = await handlerStart(id);
         const indentRight = 120;
         const k = 1000 / 60; //* 1000ms / car flashes 60 times per second *//
@@ -97,7 +97,7 @@ export class Garage {
         let leftX = car.getBoundingClientRect().left + window.scrollX;
         const distance = window.innerWidth - leftX - indentRight;
         const speed = (distance / (move.distance / move.velocity)) * k;
-        handlerDrive(id);
+
         function animation(): void {
             const state = getter(id);
             if (state === 'start' && leftX < window.innerWidth - indentRight) {
@@ -213,7 +213,8 @@ export class Garage {
             const button = event.target as HTMLButtonElement;
             if (button.className === 'start__car') {
                 const id = this.getCarId(button);
-                this.moveCar(id, handlerStart, handlerDrive, getter);
+                this.moveCar(id, handlerStart, getter);
+                handlerDrive(id);
                 button.disabled = true;
             }
         });
@@ -242,10 +243,17 @@ export class Garage {
         const race = <HTMLButtonElement>document.querySelector('.race');
         race.addEventListener('click', async () => {
             const cars: Car[] = await getterCars();
-            cars.forEach(element => this.moveCar(element.id, handlerStart, handlerDrive, getterState));
+            const promises = cars.map((element) => {
+                this.moveCar(element.id, handlerStart, getterState);
+                return handlerDrive(element.id);
+            });
             race.disabled = true;
+            const reset = <HTMLButtonElement>document.querySelector('.reset');
+            reset.disabled = true;
             const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
             buttons.forEach((button) => (button.disabled = true));
+            await Promise.allSettled(promises);
+            reset.disabled = false;
         });
     }
 
@@ -253,12 +261,12 @@ export class Garage {
         const reset = <HTMLButtonElement>document.querySelector('.reset');
         reset.addEventListener('click', async () => {
             const cars: Car[] = await getter();
-            cars.forEach(element => this.stopCar(element.id));
+            cars.forEach((element) => this.stopCar(element.id));
             const race = <HTMLButtonElement>document.querySelector('.race');
             race.disabled = false;
             const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
             buttons.forEach((button) => (button.disabled = false));
-        })
+        });
     }
 
     public clear(): void {
