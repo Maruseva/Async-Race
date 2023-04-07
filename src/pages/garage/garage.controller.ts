@@ -1,4 +1,5 @@
 import { countCars } from '../../constants';
+import { EngineError } from '../../error/engineError';
 import { GarageService } from '../../services/garage.service';
 import { Car, CarMove, CarWithoudId, CarsEngine } from '../../types';
 import { Garage } from './garage.view';
@@ -97,6 +98,21 @@ export class GarageController {
         return dataCar?.state;
     }
 
+    private async driveCar(id: number): Promise<void> {
+        try {
+            await this.service.driveCar(id);
+        } catch (err: unknown) {
+            if (err instanceof EngineError) {
+                const dataCar = this.сarsEngine.find((element) => element.id === id);
+                if (dataCar) {
+                    dataCar.state = 'break';
+                }
+            } else {
+                throw err;
+            }
+        }
+    }
+
     public init(): void {
         this.garage.bindAddCar(this.addCar.bind(this));
         this.garage.bindDeleteCar(this.deleteCar.bind(this));
@@ -105,7 +121,7 @@ export class GarageController {
         this.garage.bindGenerateCars(this.generateCars.bind(this));
         this.garage.bindSetPrevPage(this.setPrevPage.bind(this));
         this.garage.bindSetNextPage(this.setNextPage.bind(this));
-        this.garage.bindStartCar(this.startCar.bind(this), this.getEngineState.bind(this));
+        this.garage.bindStartCar(this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
         this.garage.bindStopCar(this.stopCar.bind(this));
     }
 }

@@ -18,5 +18,5 @@ export interface CarMove {
 
 export interface CarsEngine {
     id: number;
-    state: 'start' | 'stop';
+    state: 'start' | 'stop' | 'break';
 }
