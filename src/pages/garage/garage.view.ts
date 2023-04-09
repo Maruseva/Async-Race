@@ -1,6 +1,7 @@
+import './garage.style.css';
 import { carsNames } from '../../assests/data/data';
 import { CarInRow } from '../../components/car/car.view';
-import { Car } from '../../types';
+import { Car, CarsEngine } from '../../types';
 import { getRandom } from '../../utils/utils';
 
 export class Garage {
@@ -25,6 +26,9 @@ export class Garage {
 
         const pagination = this.getPagination();
         div.appendChild(pagination);
+
+        const winner = this.getWinner();
+        div.appendChild(winner);
 
         root.appendChild(div);
         this.renderCars(cars);
@@ -80,6 +84,17 @@ export class Garage {
       <button class="garage__prev">PREV</button>
       <button class="garage__next">NEXT</button>`;
         return div;
+    }
+
+    private getWinner(): Element {
+        const div = <HTMLDivElement>document.createElement('div');
+        div.className = 'garage__winner';
+        return div;
+    }
+
+    private setWinner(car: CarsEngine): void {
+        const winner = <HTMLButtonElement>document.querySelector('.garage__winner');
+        winner.innerHTML = `${car.name} wont first [${car.time}s]!`;
     }
 
     private getCarId(button: HTMLButtonElement): number {
@@ -209,11 +224,11 @@ export class Garage {
 
     public bindStartCar(handlerStart: Function, handlerDrive: Function, getter: Function): void {
         const garage = <HTMLDivElement>document.querySelector('.garage');
-        garage.addEventListener('click', (event) => {
+        garage.addEventListener('click', async (event) => {
             const button = event.target as HTMLButtonElement;
             if (button.className === 'start__car') {
                 const id = this.getCarId(button);
-                this.moveCar(id, handlerStart, getter);
+                await this.moveCar(id, handlerStart, getter);
                 handlerDrive(id);
                 button.disabled = true;
             }
@@ -243,8 +258,11 @@ export class Garage {
         const race = <HTMLButtonElement>document.querySelector('.race');
         race.addEventListener('click', async () => {
             const cars: Car[] = await getterCars();
-            const promises = cars.map((element) => {
-                this.moveCar(element.id, handlerStart, getterState);
+            const promiseStart = cars.map((element) => {
+                return this.moveCar(element.id, handlerStart, getterState);
+            });
+            await Promise.allSettled(promiseStart);
+            const promiseDrive = cars.map((element) => {
                 return handlerDrive(element.id);
             });
             race.disabled = true;
@@ -252,7 +270,8 @@ export class Garage {
             reset.disabled = true;
             const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
             buttons.forEach((button) => (button.disabled = true));
-            await Promise.allSettled(promises);
+            Promise.any(promiseDrive).then((winner) => this.setWinner(winner)).catch(() => console.log('Все машины сломались'));
+            await Promise.allSettled(promiseDrive);
             reset.disabled = false;
         });
     }
@@ -262,6 +281,8 @@ export class Garage {
         reset.addEventListener('click', async () => {
             const cars: Car[] = await getter();
             cars.forEach((element) => this.stopCar(element.id));
+            const winner = <HTMLButtonElement>document.querySelector('.garage__winner');
+            winner.innerHTML = '';
             const race = <HTMLButtonElement>document.querySelector('.race');
             race.disabled = false;
             const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');

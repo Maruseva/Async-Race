@@ -37,7 +37,7 @@ export class GarageController {
 
     private setCarsEngine(cars: Car[]): void {
         this.сarsEngine = cars.map((element) => {
-            return { id: element.id, state: 'stop' };
+            return { id: element.id, state: 'stop', name: element.name };
         });
     }
 
@@ -86,6 +86,7 @@ export class GarageController {
         const dataCar = this.сarsEngine.find((element) => element.id === id);
         if (dataCar) {
             dataCar.state = 'start';
+            dataCar.time = (response.distance/response.velocity/1000).toFixed(2);
         }
         return response;
     }
@@ -103,15 +104,20 @@ export class GarageController {
         return dataCar?.state;
     }
 
-    private async driveCar(id: number): Promise<void> {
+    private async driveCar(id: number): Promise<CarsEngine | undefined>{
+        const car = this.сarsEngine.find((element) => element.id === id);
         try {
             await this.service.driveCar(id);
+            if(car) {
+                return Promise.resolve(car);
+            }
         } catch (err: unknown) {
             if (err instanceof EngineError) {
                 const dataCar = this.сarsEngine.find((element) => element.id === id);
                 if (dataCar) {
                     dataCar.state = 'break';
                 }
+                return Promise.reject(car);
             } else {
                 throw err;
             }
