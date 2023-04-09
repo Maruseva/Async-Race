@@ -1,0 +1,11 @@
+.winners__nameTable {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: blue;
+    color: white;
+    height: 40px;
+    font-size: 20px;
+    width: 450px;
+    padding: 0 5px;
+}
