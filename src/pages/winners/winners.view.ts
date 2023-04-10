@@ -9,6 +9,7 @@ export class Winners {
     public render(): void {
         const root = <HTMLDivElement>document.querySelector(this.selector);
         const div = <HTMLDivElement>document.createElement('div');
+        div.className = 'winners__page';
 
         const title = this.getTitle(1, 1);
         div.appendChild(title);
@@ -40,7 +41,7 @@ export class Winners {
       <div>Wins</div>
       <div>Best time (seconds)</div>
       </div>`;
-        div.appendChild(nameTable)
+        div.appendChild(nameTable);
         return div;
     }
 
@@ -51,4 +52,9 @@ export class Winners {
       <button class="winners__next">NEXT</button>`;
         return div;
     }
+
+    public clearPage(): void {
+      const page = <HTMLDivElement>document.querySelector('.winners__page');
+      page.remove();
+  }
 }

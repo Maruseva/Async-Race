@@ -35,11 +35,13 @@ export class App {
 
     private toGarage(): void {
         this.page = 'garage';
+        this.winnersController.clearPage();
         this.render();
     }
 
     private toWinners(): void {
         this.page = 'winners';
+        this.garageController.clearPage();
         this.render();
     }
 

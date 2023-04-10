@@ -124,6 +124,10 @@ export class GarageController {
         }
     }
 
+    public clearPage(): void {
+        this.garage.clearPage();
+    }
+
     public init(): void {
         this.garage.bindAddCar(this.addCar.bind(this));
         this.garage.bindDeleteCar(this.deleteCar.bind(this));
