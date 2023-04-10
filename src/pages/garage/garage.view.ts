@@ -14,6 +14,7 @@ export class Garage {
         const root = <HTMLDivElement>document.querySelector(this.selector);
         const div = <HTMLDivElement>document.createElement('div');
         const garage = <HTMLDivElement>document.createElement('div');
+        div.className = 'garage__page';
         garage.className = 'garage';
 
         const control = this.getControl();
@@ -293,5 +294,10 @@ export class Garage {
     public clear(): void {
         const garage = <HTMLDivElement>document.querySelector('.garage');
         garage.innerHTML = '';
+    }
+
+    public clearPage(): void {
+        const page = <HTMLDivElement>document.querySelector('.garage__page');
+        page.remove();
     }
 }

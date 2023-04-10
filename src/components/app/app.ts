@@ -9,17 +9,42 @@ export class App {
     private header: Header;
     private garageController: GarageController;
     private winnersController: WinnersController;
+    private page: string;
     constructor(selector: string) {
         this.selector = selector;
         this.header = new Header(this.selector);
         this.garageController = new GarageController(new Garage(this.selector), new GarageService());
         this.winnersController = new WinnersController(this.selector);
+        this.page = 'garage';
     }
 
-    public async run(): Promise<void> {
+    public run(): void {
         this.header.render();
-        this.winnersController.render();
-        // await this.garageController.render();
-        // this.garageController.init();
+        this.headerInit();
+        this.render();
+    }
+
+    private async render(): Promise<void> {
+        if (this.page === 'garage') {
+            await this.garageController.render();
+            this.garageController.init();
+        } else if (this.page === 'winners') {
+            this.winnersController.render();
+        }
+    }
+
+    private toGarage(): void {
+        this.page = 'garage';
+        this.render();
+    }
+
+    private toWinners(): void {
+        this.page = 'winners';
+        this.render();
+    }
+
+    private headerInit(): void {
+        this.header.bindToGarage(this.toGarage.bind(this));
+        this.header.bindToWinners(this.toWinners.bind(this));
     }
 }
