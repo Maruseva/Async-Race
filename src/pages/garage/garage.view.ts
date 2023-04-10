@@ -258,19 +258,17 @@ export class Garage {
         const race = <HTMLButtonElement>document.querySelector('.race');
         race.addEventListener('click', async () => {
             const cars: Car[] = await getterCars();
-            const promiseStart = cars.map((element) => {
-                return this.moveCar(element.id, handlerStart, getterState);
-            });
+            const promiseStart = cars.map((element) => this.moveCar(element.id, handlerStart, getterState));
             await Promise.allSettled(promiseStart);
-            const promiseDrive = cars.map((element) => {
-                return handlerDrive(element.id);
-            });
+            const promiseDrive = cars.map((element) => handlerDrive(element.id));
             race.disabled = true;
             const reset = <HTMLButtonElement>document.querySelector('.reset');
             reset.disabled = true;
             const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
             buttons.forEach((button) => (button.disabled = true));
-            Promise.any(promiseDrive).then((winner) => this.setWinner(winner)).catch(() => console.log('Все машины сломались'));
+            Promise.any(promiseDrive)
+                .then((winner) => this.setWinner(winner))
+                .catch(() => console.log('Все машины сломались'));
             await Promise.allSettled(promiseDrive);
             reset.disabled = false;
         });

@@ -86,7 +86,7 @@ export class GarageController {
         const dataCar = this.сarsEngine.find((element) => element.id === id);
         if (dataCar) {
             dataCar.state = 'start';
-            dataCar.time = (response.distance/response.velocity/1000).toFixed(2);
+            dataCar.time = (response.distance / response.velocity / 1000).toFixed(2);
         }
         return response;
     }
@@ -104,23 +104,19 @@ export class GarageController {
         return dataCar?.state;
     }
 
-    private async driveCar(id: number): Promise<CarsEngine | undefined>{
+    private async driveCar(id: number): Promise<CarsEngine | undefined> {
         const car = this.сarsEngine.find((element) => element.id === id);
         try {
             await this.service.driveCar(id);
-            if(car) {
-                return Promise.resolve(car);
-            }
+            return car;
         } catch (err: unknown) {
             if (err instanceof EngineError) {
                 const dataCar = this.сarsEngine.find((element) => element.id === id);
                 if (dataCar) {
                     dataCar.state = 'break';
                 }
-                return Promise.reject(car);
-            } else {
-                throw err;
             }
+            throw err;
         }
     }
 
@@ -134,7 +130,12 @@ export class GarageController {
         this.garage.bindSetNextPage(this.setNextPage.bind(this));
         this.garage.bindStartCar(this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
         this.garage.bindStopCar(this.stopCar.bind(this));
-        this.garage.bindStartAllCars(this.getCars.bind(this), this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
+        this.garage.bindStartAllCars(
+            this.getCars.bind(this),
+            this.startCar.bind(this),
+            this.driveCar.bind(this),
+            this.getEngineState.bind(this)
+        );
         this.garage.bindReset(this.getCars.bind(this));
     }
 }
