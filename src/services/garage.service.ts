@@ -67,7 +67,7 @@ export class GarageService {
         const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=drive`, {
             method: 'PATCH',
         });
-        if (response.status === 500) {
+        if (response.status === 400 || response.status === 404 || response.status === 429 || response.status === 500) {
             throw new EngineError(`${response.statusText} ${response.url}`);
         }
         return response.json();
