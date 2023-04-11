@@ -22,3 +22,9 @@ export interface CarsEngine {
     name: string;
     time?: string;
 }
+
+export interface CarWinner {
+    id: number;
+    wins: number;
+    time: number;
+}
