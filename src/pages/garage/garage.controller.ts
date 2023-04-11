@@ -1,7 +1,8 @@
 import { countCars } from '../../constants';
 import { EngineError } from '../../error/engineError';
 import { GarageService } from '../../services/garage.service';
-import { Car, CarMove, CarWithoudId, CarsEngine } from '../../types';
+import { WinnersService } from '../../services/winners.service';
+import { Car, CarMove, CarWithoudId, CarsEngine, CarWinner } from '../../types';
 import { Garage } from './garage.view';
 
 export class GarageController {
@@ -9,11 +10,13 @@ export class GarageController {
     private service: GarageService;
     private page: number;
     private сarsEngine: CarsEngine[];
+    private winnerService: WinnersService;
     constructor(garage: Garage, sevice: GarageService) {
         this.garage = garage;
         this.service = sevice;
         this.page = 1;
         this.сarsEngine = [];
+        this.winnerService = new WinnersService();
     }
 
     public async render(): Promise<void> {
@@ -86,7 +89,7 @@ export class GarageController {
         const dataCar = this.сarsEngine.find((element) => element.id === id);
         if (dataCar) {
             dataCar.state = 'start';
-            dataCar.time = (response.distance/response.velocity/1000).toFixed(2);
+            dataCar.time = (response.distance / response.velocity / 1000).toFixed(2);
         }
         return response;
     }
@@ -104,11 +107,11 @@ export class GarageController {
         return dataCar?.state;
     }
 
-    private async driveCar(id: number): Promise<CarsEngine | undefined>{
+    private async driveCar(id: number): Promise<CarsEngine | undefined> {
         const car = this.сarsEngine.find((element) => element.id === id);
         try {
             await this.service.driveCar(id);
-            if(car) {
+            if (car) {
                 return Promise.resolve(car);
             }
         } catch (err: unknown) {
@@ -128,6 +131,10 @@ export class GarageController {
         this.garage.clearPage();
     }
 
+    public async addWinnerCar(car: CarWinner): Promise<void> {
+        const response = await this.winnerService.addCar(car);
+    }
+
     public init(): void {
         this.garage.bindAddCar(this.addCar.bind(this));
         this.garage.bindDeleteCar(this.deleteCar.bind(this));
@@ -138,7 +145,13 @@ export class GarageController {
         this.garage.bindSetNextPage(this.setNextPage.bind(this));
         this.garage.bindStartCar(this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
         this.garage.bindStopCar(this.stopCar.bind(this));
-        this.garage.bindStartAllCars(this.getCars.bind(this), this.startCar.bind(this), this.driveCar.bind(this), this.getEngineState.bind(this));
+        this.garage.bindStartAllCars(
+            this.getCars.bind(this),
+            this.startCar.bind(this),
+            this.driveCar.bind(this),
+            this.getEngineState.bind(this),
+            this.addWinnerCar.bind(this)
+        );
         this.garage.bindReset(this.getCars.bind(this));
     }
 }

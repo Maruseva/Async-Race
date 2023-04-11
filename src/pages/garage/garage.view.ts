@@ -3,6 +3,7 @@ import { carsNames } from '../../assests/data/data';
 import { CarInRow } from '../../components/car/car.view';
 import { Car, CarsEngine } from '../../types';
 import { getRandom } from '../../utils/utils';
+import { Winners } from '../winners/winners.view';
 
 export class Garage {
     private readonly selector: string;
@@ -254,7 +255,8 @@ export class Garage {
         getterCars: Function,
         handlerStart: Function,
         handlerDrive: Function,
-        getterState: Function
+        getterState: Function,
+        handlerWinner: Function,
     ): void {
         const race = <HTMLButtonElement>document.querySelector('.race');
         race.addEventListener('click', async () => {
@@ -271,7 +273,10 @@ export class Garage {
             reset.disabled = true;
             const buttons = <NodeListOf<HTMLButtonElement>>document.querySelectorAll('.start__car');
             buttons.forEach((button) => (button.disabled = true));
-            Promise.any(promiseDrive).then((winner) => this.setWinner(winner)).catch(() => console.log('Все машины сломались'));
+            Promise.any(promiseDrive).then((winner) => {
+                this.setWinner(winner);
+                handlerWinner({id: winner.id, wins: 1, time: winner.time})})
+                .catch(() => console.log('Все машины сломались'));
             await Promise.allSettled(promiseDrive);
             reset.disabled = false;
         });

@@ -6,6 +6,11 @@ export interface Car {
 
 export type CarWithoudId = Omit<Car, 'id'>;
 
+export interface CarWinner extends Car {
+    wins: number;
+    time: number;
+}
+
 export interface CarsPage {
     cars: Car[];
     count: number;

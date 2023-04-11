@@ -1,0 +1,16 @@
+.winners__cars {
+    display: flex;
+    justify-content: space-between;
+    width: 450px;
+}
+
+.winners__cars > div {
+    width: 80px;
+    padding-left: 3px;
+}
+
+.winners__svg {
+    height: 40px;
+    position: relative;
+    top: -30px
+}

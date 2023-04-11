@@ -4,8 +4,12 @@
     align-items: center;
     background: blue;
     color: white;
-    height: 40px;
+    height: 50px;
     font-size: 20px;
     width: 450px;
     padding: 0 5px;
+}
+
+.winners__nameTable  > div {
+    width: 80px;
 }
