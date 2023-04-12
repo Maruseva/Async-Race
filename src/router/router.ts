@@ -5,14 +5,12 @@ import { GarageService } from "../services/garage.service";
 import { Pages } from "../types";
 
 export class Router {
-    private readonly selector: string;
     private garageController: GarageController;
     private winnersController: WinnersController;
     private page: Pages;
     constructor(selector: string) {
-        this.selector = selector;
-        this.garageController = new GarageController(new Garage(this.selector), new GarageService());
-        this.winnersController = new WinnersController(this.selector);
+        this.garageController = new GarageController(new Garage(selector), new GarageService());
+        this.winnersController = new WinnersController(selector);
         this.page = Pages.Garage;
     }
     
