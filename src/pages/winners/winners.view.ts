@@ -10,12 +10,12 @@ export class Winners {
         this.winnerCar = new WinnerCar;
     }
 
-    public render(cars: CarWinner[]): void {
+    public render(count: number, page: number, cars: CarWinner[]): void {
         const root = <HTMLDivElement>document.querySelector(this.selector);
         const div = <HTMLDivElement>document.createElement('div');
         div.className = 'winners__page';
 
-        const title = this.getTitle(1, 1);
+        const title = this.getTitle(count, page);
         div.appendChild(title);
 
         const table = this.getTable(cars);

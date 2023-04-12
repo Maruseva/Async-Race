@@ -6,7 +6,10 @@ export class WinnersService {
         const response = await fetch(`http://127.0.0.1:3000/winners/?_page=${page}&_limit=${countWinners}&_sort=${sort}&_limit=${order}`, {
             method: 'GET',
         });
-        return response.json();
+        const winners = await response.json();
+        const count = Number(response.headers.get('X-Total-Count'));
+        const value = { winners, count };
+        return value;
     }
 
     public async addCar(car: CarWinner): Promise<CarWinner> {

@@ -38,3 +38,14 @@ export enum Pages {
     Garage = 'garage',
     Winners = 'winners'
 }
+
+export enum WinnersSort {
+    Id = 'id',
+    Wins = 'wins',
+    Time = 'time'
+}
+
+export enum WinnersOrder {
+    ASC = 'ASC',
+    DESC = 'DESC'
+}

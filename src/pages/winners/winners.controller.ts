@@ -1,6 +1,6 @@
 import { GarageService } from "../../services/garage.service";
 import { WinnersService } from "../../services/winners.service";
-import { Car } from "../../types";
+import { Car, WinnersOrder, WinnersSort } from "../../types";
 import { Winners } from "./winners.view";
 
 export class WinnersController {
@@ -16,18 +16,19 @@ export class WinnersController {
         this.service = new WinnersService;
         this.garageService = new GarageService;
         this.page = 1;
-        this.sort = 'id';
-        this.order = 'ASC';
+        this.sort = WinnersSort.Id;
+        this.order = WinnersOrder.ASC;
     }
 
     public async render(): Promise<void> {
         const response = await this.getWinners();
-        for (let i = 0; response.length > i; i++) {
-            const car = await this.getCar(response[i].id);
-            response[i].name = car.name;
-            response[i].color = car.color;
+        const winners = response.winners;
+        for (let i = 0; winners.length > i; i++) {
+            const car = await this.getCar(winners[i].id);
+            winners[i].name = car.name;
+            winners[i].color = car.color;
         }
-        this.winners.render(response);
+        this.winners.render(response.count, this.page, winners);
     }
 
     public async getWinners () {

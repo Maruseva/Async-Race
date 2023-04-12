@@ -8,7 +8,6 @@ export class App {
     constructor(selector: string) {
         this.router = new Router(selector);
         this.headerController = new HeaderController(new Header(selector), this.router);
-        
     }
 
     public run(): void {
