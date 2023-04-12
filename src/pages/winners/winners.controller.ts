@@ -2,8 +2,8 @@ import { Winners } from "./winners.view";
 
 export class WinnersController {
     private winners: Winners;
-    constructor(selector: string) {
-        this.winners = new Winners(selector)
+    constructor(winners: Winners) {
+        this.winners = winners;
     }
 
     public render(): void {
