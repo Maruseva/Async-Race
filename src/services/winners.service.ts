@@ -40,4 +40,11 @@ export class WinnersService {
         });
         return response.json();
     }
+
+    public async deleteWinner(id: number): Promise<{}> {
+        const response = await fetch(`http://127.0.0.1:3000/winners/${id}`, {
+            method: 'DELETE'
+        });
+        return response;
+    }
 }

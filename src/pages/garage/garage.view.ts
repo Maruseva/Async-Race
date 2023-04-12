@@ -150,13 +150,14 @@ export class Garage {
         });
     }
 
-    public bindDeleteCar(handler: Function): void {
+    public bindDeleteCar(handlerGarage: Function, handlerWinners: Function): void {
         const garage = <HTMLDivElement>document.querySelector('.garage');
         garage.addEventListener('click', (event) => {
             const button = event.target as HTMLButtonElement;
             if (button.className === 'remove__car') {
                 const id = this.getCarId(button);
-                handler(id);
+                handlerGarage(id);
+                handlerWinners(id);
             }
         });
     }
