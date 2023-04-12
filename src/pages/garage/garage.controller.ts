@@ -136,7 +136,7 @@ export class GarageController {
                 if(car.time < dataCar.time) {
                     this.updateWinner(car.id, {wins: dataCar.wins+1, time: car.time});
                 } else {
-                    this.updateWinner(car.id, {wins: dataCar.wins+1, time: dataCar.wins});
+                    this.updateWinner(car.id, {wins: dataCar.wins+1, time: dataCar.time});
                 }
             }
             throw err;
