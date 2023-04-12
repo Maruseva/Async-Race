@@ -22,3 +22,8 @@ export interface CarsEngine {
     name: string;
     time?: string;
 }
+
+export enum Pages {
+    Garage = 'garage',
+    Winners = 'winners'
+}

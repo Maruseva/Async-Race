@@ -14,6 +14,7 @@ export class Garage {
         const root = <HTMLDivElement>document.querySelector(this.selector);
         const div = <HTMLDivElement>document.createElement('div');
         const garage = <HTMLDivElement>document.createElement('div');
+        div.className = 'garage__page';
         garage.className = 'garage';
 
         const control = this.getControl();
@@ -43,8 +44,8 @@ export class Garage {
     }
 
     public updateTitle(count: number, page: number): void {
-        const countSpan = <HTMLSpanElement>document.querySelector('.garage__count');
-        const pageSpan = <HTMLSpanElement>document.querySelector('.garage__page');
+        const countSpan = <HTMLSpanElement>document.querySelector('.garage__title__count');
+        const pageSpan = <HTMLSpanElement>document.querySelector('.garage__title__page');
         countSpan.innerHTML = count.toString();
         pageSpan.innerHTML = page.toString();
     }
@@ -73,8 +74,8 @@ export class Garage {
     private getTitle(count: number, page: number): Element {
         const div = <HTMLDivElement>document.createElement('div');
         div.innerHTML = `
-      <h3>Garage <span class="garage__count">${count}</span></h3>
-      <span>Page #<span class="garage__page">${page}</span></span>`;
+      <h3>Garage <span class="garage__title__count">${count}</span></h3>
+      <span>Page #<span class="garage__title__page">${page}</span></span>`;
         return div;
     }
 
@@ -291,5 +292,10 @@ export class Garage {
     public clear(): void {
         const garage = <HTMLDivElement>document.querySelector('.garage');
         garage.innerHTML = '';
+    }
+
+    public clearPage(): void {
+        const page = <HTMLDivElement>document.querySelector('.garage__page');
+        page.remove();
     }
 }

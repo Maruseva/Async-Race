@@ -1,25 +1,19 @@
-import { GarageController } from '../../pages/garage/garage.controller';
-import { Garage } from '../../pages/garage/garage.view';
-import { WinnersController } from '../../pages/winners/winners.controller';
-import { GarageService } from '../../services/garage.service';
+import { Router } from '../../router/router';
+import { HeaderController } from '../header/header.controller';
 import { Header } from '../header/header.view';
 
 export class App {
-    private readonly selector: string;
-    private header: Header;
-    private garageController: GarageController;
-    private winnersController: WinnersController;
+    private headerController: HeaderController;
+    private router: Router;
     constructor(selector: string) {
-        this.selector = selector;
-        this.header = new Header(this.selector);
-        this.garageController = new GarageController(new Garage(this.selector), new GarageService());
-        this.winnersController = new WinnersController(this.selector);
+        this.router = new Router(selector);
+        this.headerController = new HeaderController(new Header(selector), this.router);
+        
     }
 
-    public async run(): Promise<void> {
-        this.header.render();
-        this.winnersController.render();
-        // await this.garageController.render();
-        // this.garageController.init();
+    public run(): void {
+        this.headerController.render();
+        this.headerController.headerInit();
+        this.router.render();
     }
 }
