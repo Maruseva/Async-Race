@@ -261,13 +261,9 @@ export class Garage {
         const race = <HTMLButtonElement>document.querySelector('.race');
         race.addEventListener('click', async () => {
             const cars: Car[] = await getterCars();
-            const promiseStart = cars.map((element) => {
-                return this.moveCar(element.id, handlerStart, getterState);
-            });
+            const promiseStart = cars.map((element) => this.moveCar(element.id, handlerStart, getterState));
             await Promise.allSettled(promiseStart);
-            const promiseDrive = cars.map((element) => {
-                return handlerDrive(element.id);
-            });
+            const promiseDrive = cars.map((element) => handlerDrive(element.id));
             race.disabled = true;
             const reset = <HTMLButtonElement>document.querySelector('.reset');
             reset.disabled = true;

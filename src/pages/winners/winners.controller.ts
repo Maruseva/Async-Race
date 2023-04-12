@@ -1,20 +1,18 @@
 import { GarageService } from "../../services/garage.service";
 import { WinnersService } from "../../services/winners.service";
-import { Car, CarWinner } from "../../types";
-import { GarageController } from "../garage/garage.controller";
+import { Car } from "../../types";
 import { Winners } from "./winners.view";
 
 export class WinnersController {
-    private readonly selector: string;
     private winners: Winners;
     private service: WinnersService;
     private page: number;
     private sort: string;
     private order: string;
     private garageService: GarageService;
-    constructor(selector: string) {
-        this.selector = selector;
-        this.winners = new Winners(this.selector);
+
+    constructor(winners: Winners) {
+        this.winners = winners;
         this.service = new WinnersService;
         this.garageService = new GarageService;
         this.page = 1;

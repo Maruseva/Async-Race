@@ -111,19 +111,15 @@ export class GarageController {
         const car = this.сarsEngine.find((element) => element.id === id);
         try {
             await this.service.driveCar(id);
-            if (car) {
-                return Promise.resolve(car);
-            }
+            return car;
         } catch (err: unknown) {
             if (err instanceof EngineError) {
                 const dataCar = this.сarsEngine.find((element) => element.id === id);
                 if (dataCar) {
                     dataCar.state = 'break';
                 }
-                return Promise.reject(car);
-            } else {
-                throw err;
             }
+            throw err;
         }
     }
 

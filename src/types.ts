@@ -33,3 +33,8 @@ export interface CarWinner {
     wins: number;
     time: number;
 }
+
+export enum Pages {
+    Garage = 'garage',
+    Winners = 'winners'
+}
