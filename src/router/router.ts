@@ -3,6 +3,7 @@ import { Garage } from "../pages/garage/garage.view";
 import { WinnersController } from "../pages/winners/winners.controller";
 import { Winners } from "../pages/winners/winners.view";
 import { GarageService } from "../services/garage.service";
+import { WinnersService } from "../services/winners.service";
 import { Pages } from "../types";
 
 export class Router {
@@ -10,8 +11,8 @@ export class Router {
     private winnersController: WinnersController;
     private page: Pages;
     constructor(selector: string) {
-        this.garageController = new GarageController(new Garage(selector), new GarageService());
-        this.winnersController = new WinnersController(new Winners(selector));
+        this.garageController = new GarageController(new Garage(selector), new GarageService(), new WinnersService());
+        this.winnersController = new WinnersController(new Winners(selector), new WinnersService(), new GarageService());
         this.page = Pages.Garage;
     }
     
