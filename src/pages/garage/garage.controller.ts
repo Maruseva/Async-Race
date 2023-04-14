@@ -1,8 +1,9 @@
 import { countCars } from '../../constants';
+import { DuplicateError } from '../../error/DuplicateError';
 import { EngineError } from '../../error/engineError';
 import { GarageService } from '../../services/garage.service';
 import { WinnersService } from '../../services/winners.service';
-import { Car, CarMove, CarWithoudId, CarsEngine, CarWinner } from '../../types';
+import { Car, CarMove, CarWithoudId, CarsEngine, CarWinner, WinnerWithoudId } from '../../types';
 import { Garage } from './garage.view';
 
 export class GarageController {
@@ -128,7 +129,27 @@ export class GarageController {
     }
 
     public async addWinnerCar(car: CarWinner): Promise<void> {
-        const response = await this.winnerService.addCar(car);
+        try {
+            const response = await this.winnerService.addWinner(car);
+        } catch (err: unknown) {
+            if (err instanceof DuplicateError) {
+                const dataCar = await this.getWinner(car.id);
+                const time = car.time < dataCar.time ? car.time : dataCar.time;
+                this.updateWinner(car.id, { wins: dataCar.wins + 1, time });
+            } else {
+                throw err;
+            }
+        }
+    }
+
+    public async getWinner(id: number): Promise<CarWinner> {
+        const response = await this.winnerService.getWinner(id);
+        return response;
+    }
+
+    public async updateWinner(id: number, car: WinnerWithoudId): Promise<CarWinner> {
+        const response = await this.winnerService.updateWinner(id, car);
+        return response;
     }
 
     public init(): void {

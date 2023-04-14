@@ -34,6 +34,8 @@ export interface CarWinner {
     time: number;
 }
 
+export type WinnerWithoudId = Pick<CarWinner, 'wins' | 'time'>;
+
 export enum Pages {
     Garage = 'garage',
     Winners = 'winners'
