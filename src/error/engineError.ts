@@ -4,10 +4,3 @@ export class EngineError extends Error {
         this.name = 'EngineError';
     }
 }
-
-export class DuplicateError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'DuplicateError';
-    }
-}

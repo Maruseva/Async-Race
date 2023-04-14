@@ -1,9 +1,9 @@
 import { countWinners } from "../constants";
-import { DuplicateError } from "../error/engineError";
+import { DuplicateError } from "../error/duplicateError";
 import { CarWinner, WinnerWithoudId } from "../types";
 
 export class WinnersService {
-    public async getWinners(page: number, sort: string, order: string) {
+    public async getWinners(page: number, sort: string, order: string): Promise<{count: number, winners: CarWinner[]}> {
         const response = await fetch(`http://127.0.0.1:3000/winners/?_page=${page}&_limit=${countWinners}&_sort=${sort}&_limit=${order}`, {
             method: 'GET',
         });

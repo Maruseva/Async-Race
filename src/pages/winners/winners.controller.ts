@@ -1,7 +1,7 @@
-import { GarageService } from "../../services/garage.service";
-import { WinnersService } from "../../services/winners.service";
-import { Car, WinnersOrder, WinnersSort } from "../../types";
-import { Winners } from "./winners.view";
+import { GarageService } from '../../services/garage.service';
+import { WinnersService } from '../../services/winners.service';
+import { Car, CarWinner, WinnersOrder, WinnersSort } from '../../types';
+import { Winners } from './winners.view';
 
 export class WinnersController {
     private winners: Winners;
@@ -11,10 +11,10 @@ export class WinnersController {
     private order: string;
     private garageService: GarageService;
 
-    constructor(winners: Winners) {
+    constructor(winners: Winners, service: WinnersService, garageService: GarageService) {
         this.winners = winners;
-        this.service = new WinnersService;
-        this.garageService = new GarageService;
+        this.service = service;
+        this.garageService = garageService;
         this.page = 1;
         this.sort = WinnersSort.Id;
         this.order = WinnersOrder.ASC;
@@ -31,7 +31,7 @@ export class WinnersController {
         this.winners.render(response.count, this.page, winners);
     }
 
-    public async getWinners () {
+    public async getWinners(): Promise<{count: number, winners: CarWinner[]}> {
         const response = await this.service.getWinners(this.page, this.sort, this.order);
         return response;
     }

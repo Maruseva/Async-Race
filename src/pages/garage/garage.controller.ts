@@ -1,5 +1,6 @@
 import { countCars } from '../../constants';
-import { DuplicateError, EngineError } from '../../error/engineError';
+import { DuplicateError } from '../../error/duplicateError';
+import { EngineError } from '../../error/engineError';
 import { GarageService } from '../../services/garage.service';
 import { WinnersService } from '../../services/winners.service';
 import { Car, CarMove, CarWithoudId, CarsEngine, CarWinner, WinnerWithoudId } from '../../types';
@@ -11,12 +12,12 @@ export class GarageController {
     private page: number;
     private сarsEngine: CarsEngine[];
     private winnerService: WinnersService;
-    constructor(garage: Garage, sevice: GarageService) {
+    constructor(garage: Garage, sevice: GarageService, winnerService: WinnersService) {
         this.garage = garage;
         this.service = sevice;
+        this.winnerService = winnerService;
         this.page = 1;
         this.сarsEngine = [];
-        this.winnerService = new WinnersService();
     }
 
     public async render(): Promise<void> {
@@ -128,18 +129,16 @@ export class GarageController {
     }
 
     public async addWinnerCar(car: CarWinner): Promise<void> {
-        try{
+        try {
             const response = await this.winnerService.addWinner(car);
         } catch (err: unknown) {
             if (err instanceof DuplicateError) {
                 const dataCar = await this.getWinner(car.id);
-                if(car.time < dataCar.time) {
-                    this.updateWinner(car.id, {wins: dataCar.wins+1, time: car.time});
-                } else {
-                    this.updateWinner(car.id, {wins: dataCar.wins+1, time: dataCar.wins});
-                }
+                const time = car.time < dataCar.time ? car.time : dataCar.time;
+                this.updateWinner(car.id, { wins: dataCar.wins + 1, time });
+            } else {
+                throw err;
             }
-            throw err;
         }
     }
 
