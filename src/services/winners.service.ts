@@ -1,5 +1,5 @@
 import { countWinners } from "../constants";
-import { DuplicateError } from "../error/engineError";
+import { DuplicateError } from "../error/DuplicateError";
 import { CarWinner, WinnerWithoudId } from "../types";
 
 export class WinnersService {
