@@ -1,7 +1,7 @@
 import './car.style.css';
 import flagImg from '../../assests/img/flag.png';
 import { Car } from '../../types';
-import { getCarIcon } from '../../utils/utils';
+import { getCarIcon } from '../../utils/car';
 
 export class CarInRow {
     public static render(car: Car): Element {

@@ -1,6 +1,6 @@
 import './winnerCar.style.css';
 import { CarWinner } from '../../types';
-import { getCarIcon } from '../../utils/utils';
+import { getCarIcon } from '../../utils/car';
 
 export class WinnerCar {
     public render(car: CarWinner, number: number): Element {

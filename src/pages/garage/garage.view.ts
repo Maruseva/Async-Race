@@ -2,7 +2,7 @@ import './garage.style.css';
 import { carsNames } from '../../assests/data/data';
 import { CarInRow } from '../../components/car/car.view';
 import { Car, CarsEngine } from '../../types';
-import { getRandom } from '../../utils/utils';
+import { getRandom } from '../../utils/math';
 
 export class Garage {
     private readonly selector: string;
