@@ -3,7 +3,6 @@ import { carsNames } from '../../assests/data/data';
 import { CarInRow } from '../../components/car/car.view';
 import { Car, CarsEngine } from '../../types';
 import { getRandom } from '../../utils/utils';
-import { Winners } from '../winners/winners.view';
 
 export class Garage {
     private readonly selector: string;

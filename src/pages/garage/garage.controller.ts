@@ -11,12 +11,12 @@ export class GarageController {
     private page: number;
     private сarsEngine: CarsEngine[];
     private winnerService: WinnersService;
-    constructor(garage: Garage, sevice: GarageService) {
+    constructor(garage: Garage, sevice: GarageService, winnerService: WinnersService) {
         this.garage = garage;
         this.service = sevice;
+        this.winnerService = winnerService;
         this.page = 1;
         this.сarsEngine = [];
-        this.winnerService = new WinnersService();
     }
 
     public async render(): Promise<void> {
