@@ -1,7 +1,8 @@
 import { countCars } from '../../constants';
 import { EngineError } from '../../error/engineError';
 import { GarageService } from '../../services/garage.service';
-import { Car, CarMove, CarWithoudId, CarsEngine } from '../../types';
+import { WinnersService } from '../../services/winners.service';
+import { Car, CarMove, CarWithoudId, CarsEngine, CarWinner } from '../../types';
 import { Garage } from './garage.view';
 
 export class GarageController {
@@ -9,9 +10,11 @@ export class GarageController {
     private service: GarageService;
     private page: number;
     private сarsEngine: CarsEngine[];
-    constructor(garage: Garage, sevice: GarageService) {
+    private winnerService: WinnersService;
+    constructor(garage: Garage, sevice: GarageService, winnerService: WinnersService) {
         this.garage = garage;
         this.service = sevice;
+        this.winnerService = winnerService;
         this.page = 1;
         this.сarsEngine = [];
     }
@@ -124,6 +127,10 @@ export class GarageController {
         this.garage.clearPage();
     }
 
+    public async addWinnerCar(car: CarWinner): Promise<void> {
+        const response = await this.winnerService.addCar(car);
+    }
+
     public init(): void {
         this.garage.bindAddCar(this.addCar.bind(this));
         this.garage.bindDeleteCar(this.deleteCar.bind(this));
@@ -138,7 +145,8 @@ export class GarageController {
             this.getCars.bind(this),
             this.startCar.bind(this),
             this.driveCar.bind(this),
-            this.getEngineState.bind(this)
+            this.getEngineState.bind(this),
+            this.addWinnerCar.bind(this)
         );
         this.garage.bindReset(this.getCars.bind(this));
     }

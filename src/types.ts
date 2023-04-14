@@ -6,6 +6,11 @@ export interface Car {
 
 export type CarWithoudId = Omit<Car, 'id'>;
 
+export interface CarWinner extends Car {
+    wins: number;
+    time: number;
+}
+
 export interface CarsPage {
     cars: Car[];
     count: number;
@@ -23,7 +28,24 @@ export interface CarsEngine {
     time?: string;
 }
 
+export interface CarWinner {
+    id: number;
+    wins: number;
+    time: number;
+}
+
 export enum Pages {
     Garage = 'garage',
     Winners = 'winners'
+}
+
+export enum WinnersSort {
+    Id = 'id',
+    Wins = 'wins',
+    Time = 'time'
+}
+
+export enum WinnersOrder {
+    ASC = 'ASC',
+    DESC = 'DESC'
 }
