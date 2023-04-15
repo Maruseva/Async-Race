@@ -1,5 +1,5 @@
 import { countWinners } from "../constants";
-import { DuplicateError } from "../error/DuplicateError";
+import { DuplicateError } from "../error/duplicateError";
 import { CarWinner, WinnerWithoudId } from "../types";
 
 export class WinnersService {
@@ -39,5 +39,12 @@ export class WinnersService {
             method: 'GET'
         });
         return response.json();
+    }
+
+    public async deleteWinner(id: number): Promise<{}> {
+        const response = await fetch(`http://127.0.0.1:3000/winners/${id}`, {
+            method: 'DELETE'
+        });
+        return response;
     }
 }

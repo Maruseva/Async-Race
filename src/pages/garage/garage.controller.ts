@@ -1,5 +1,5 @@
 import { countCars } from '../../constants';
-import { DuplicateError } from '../../error/DuplicateError';
+import { DuplicateError } from '../../error/duplicateError';
 import { EngineError } from '../../error/engineError';
 import { GarageService } from '../../services/garage.service';
 import { WinnersService } from '../../services/winners.service';
@@ -152,9 +152,13 @@ export class GarageController {
         return response;
     }
 
+    public async deleteWinner(id: number): Promise<void> {
+        await this.winnerService.deleteWinner(id);
+    }
+
     public init(): void {
         this.garage.bindAddCar(this.addCar.bind(this));
-        this.garage.bindDeleteCar(this.deleteCar.bind(this));
+        this.garage.bindDeleteCar(this.deleteCar.bind(this), this.deleteWinner.bind(this));
         this.garage.bindGetCar(this.getCar.bind(this));
         this.garage.bindUpdateCar(this.updateCar.bind(this));
         this.garage.bindGenerateCars(this.generateCars.bind(this));
