@@ -151,11 +151,11 @@ export class Garage {
 
     public bindDeleteCar(handlerGarage: Function, handlerWinners: Function): void {
         const garage = <HTMLDivElement>document.querySelector('.garage');
-        garage.addEventListener('click', (event) => {
+        garage.addEventListener('click', async (event) => {
             const button = event.target as HTMLButtonElement;
             if (button.className === 'remove__car') {
                 const id = this.getCarId(button);
-                handlerGarage(id);
+                await handlerGarage(id);
                 handlerWinners(id);
             }
         });
