@@ -1,6 +1,6 @@
 import { GarageService } from '../../services/garage.service';
 import { WinnersService } from '../../services/winners.service';
-import { Car, CarWinner, WinnersOrder, WinnersSort } from '../../types';
+import { Car, CarWinner, WinnersOrder, WinnersSort, WinnerWithNameAndColor } from '../../types';
 import { Winners } from './winners.view';
 
 export class WinnersController {
@@ -17,21 +17,33 @@ export class WinnersController {
         this.garageService = garageService;
         this.page = 1;
         this.sort = WinnersSort.Id;
-        this.order = WinnersOrder.ASC;
+        this.order = WinnersOrder.DESC;
     }
 
     public async render(): Promise<void> {
+        const response = await this.getWinnersWithNameAndColor();
+        this.winners.render(response.count, this.page, response.winners);
+    }
+
+    private async getWinnersWithNameAndColor(): Promise<{ count: number; winners: WinnerWithNameAndColor[] }> {
+        const winnerWithNameAndColor = [];
         const response = await this.getWinners();
         const winners = response.winners;
         for (let i = 0; winners.length > i; i++) {
             const car = await this.getCar(winners[i].id);
-            winners[i].name = car.name;
-            winners[i].color = car.color;
+            const winner = {
+                id: winners[i].id,
+                time: winners[i].time,
+                wins: winners[i].wins,
+                name: car.name,
+                color: car.color,
+            };
+            winnerWithNameAndColor.push(winner);
         }
-        this.winners.render(response.count, this.page, winners);
+        return { count: response.count, winners: winnerWithNameAndColor };
     }
 
-    public async getWinners(): Promise<{count: number, winners: CarWinner[]}> {
+    public async getWinners(): Promise<{ count: number; winners: CarWinner[] }> {
         const response = await this.service.getWinners(this.page, this.sort, this.order);
         return response;
     }
@@ -41,7 +53,20 @@ export class WinnersController {
         return response;
     }
 
+    private async sortWinners(sortWinners: string): Promise<void> {
+        this.sort = sortWinners;
+        this.order = this.order === WinnersOrder.ASC ? WinnersOrder.DESC : WinnersOrder.ASC;
+        this.winners.clearWinnersTable();
+        const response = await this.getWinnersWithNameAndColor();
+        this.winners.getTable(response.winners);
+        this.init();
+    }
+
     public clearPage(): void {
         this.winners.clearPage();
+    }
+
+    public init(): void {
+        this.winners.bindSortWins(this.sortWinners.bind(this));
     }
 }

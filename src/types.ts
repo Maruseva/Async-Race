@@ -6,7 +6,7 @@ export interface Car {
 
 export type CarWithoudId = Omit<Car, 'id'>;
 
-export interface CarWinner extends Car {
+export interface WinnerWithNameAndColor extends Car {
     wins: number;
     time: number;
 }
