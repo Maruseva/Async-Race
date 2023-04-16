@@ -1,3 +1,4 @@
+import { countWinners } from '../../constants';
 import { GarageService } from '../../services/garage.service';
 import { WinnersService } from '../../services/winners.service';
 import { Car, CarWinner, WinnersOrder, WinnersSort, WinnerWithNameAndColor } from '../../types';
@@ -56,10 +57,31 @@ export class WinnersController {
     private async sortWinners(sortWinners: string): Promise<void> {
         this.sort = sortWinners;
         this.order = this.order === WinnersOrder.ASC ? WinnersOrder.DESC : WinnersOrder.ASC;
+        await this.updateWinnersTable();
+        this.init();
+    }
+
+    private async updateWinnersTable(): Promise<void> {
         this.winners.clearWinnersTable();
         const response = await this.getWinnersWithNameAndColor();
-        this.winners.getTable(response.winners);
-        this.init();
+        this.winners.getTable(response.winners, this.page);
+    }
+
+    private async setPrevPage(): Promise<void> {
+        if (this.page > 1) {
+            this.page--;
+            await this.updateWinnersTable();
+            this.init();
+        }
+    }
+
+    private async setNextPage(): Promise<void> {
+        const response = await this.getWinners();
+        if (this.page < response.count / countWinners) {
+            this.page++;
+            await this.updateWinnersTable();
+            this.init();
+        }
     }
 
     public clearPage(): void {
@@ -68,5 +90,7 @@ export class WinnersController {
 
     public init(): void {
         this.winners.bindSortWins(this.sortWinners.bind(this));
+        this.winners.bindSetPrevPage(this.setPrevPage.bind(this));
+        this.winners.bindSetNextPage(this.setNextPage.bind(this));
     }
 }

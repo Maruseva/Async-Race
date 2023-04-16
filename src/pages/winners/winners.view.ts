@@ -26,7 +26,7 @@ export class Winners {
         div.appendChild(pagination);
 
         root.appendChild(div);
-        this.getTable(cars);
+        this.getTable(cars, page);
     }
 
     private getTitle(count: number, page: number): Element {
@@ -37,7 +37,7 @@ export class Winners {
         return div;
     }
 
-    public getTable(cars: WinnerWithNameAndColor[]): void {
+    public getTable(cars: WinnerWithNameAndColor[], page: number): void {
         const div = <HTMLDivElement>document.querySelector('.winners__table');
         const table = <HTMLDivElement>document.createElement('div');
         const nameTable = <HTMLDivElement>document.createElement('div');
@@ -50,7 +50,7 @@ export class Winners {
       </div>`;
         table.appendChild(nameTable);
         cars.map((element, index) => {
-            const winner = this.winnerCar.render(element, index + 1);
+            const winner = this.winnerCar.render(element, (page - 1) * 10 + index + 1);
             table.appendChild(winner);
         });
         div.appendChild(table);
@@ -73,6 +73,20 @@ export class Winners {
             } else if (div.className === 'winners__time') {
                 handler('time');
             }
+        });
+    }
+
+    public bindSetPrevPage(handler: Function): void {
+        const button = <HTMLButtonElement>document.querySelector('.winners__prev');
+        button.addEventListener('click', () => {
+            handler();
+        });
+    }
+
+    public bindSetNextPage(handler: Function): void {
+        const button = <HTMLButtonElement>document.querySelector('.winners__next');
+        button.addEventListener('click', () => {
+            handler();
         });
     }
 
