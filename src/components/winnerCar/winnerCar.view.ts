@@ -1,9 +1,9 @@
 import './winnerCar.style.css';
-import { CarWinner } from '../../types';
+import { WinnerWithNameAndColor } from '../../types';
 import { getCarIcon } from '../../utils/car';
 
 export class WinnerCar {
-    public render(car: CarWinner, number: number): Element {
+    public render(car: WinnerWithNameAndColor, number: number): Element {
         const div = <HTMLDivElement>document.createElement('div');
         div.innerHTML = `<div class="winners__cars">
             <div>${number}</div>

@@ -13,3 +13,11 @@
 .winners__nameTable  > div {
     width: 80px;
 }
+
+.winners__wins {
+    cursor: pointer;
+}
+
+.winners__time {
+    cursor: pointer;
+}

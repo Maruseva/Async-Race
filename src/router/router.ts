@@ -21,7 +21,8 @@ export class Router {
             await this.garageController.render();
             this.garageController.init();
         } else if (this.page === Pages.Winners) {
-            this.winnersController.render();
+            await this.winnersController.render();
+            this.winnersController.init();
         }
     }
 
