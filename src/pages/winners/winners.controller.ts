@@ -58,7 +58,6 @@ export class WinnersController {
         this.sort = sortWinners;
         this.order = this.order === WinnersOrder.ASC ? WinnersOrder.DESC : WinnersOrder.ASC;
         await this.updateWinnersTable();
-        this.init();
     }
 
     private async updateWinnersTable(): Promise<void> {
@@ -71,7 +70,6 @@ export class WinnersController {
         if (this.page > 1) {
             this.page--;
             await this.updateWinnersTable();
-            this.init();
         }
     }
 
@@ -80,7 +78,6 @@ export class WinnersController {
         if (this.page < response.count / countWinners) {
             this.page++;
             await this.updateWinnersTable();
-            this.init();
         }
     }
 

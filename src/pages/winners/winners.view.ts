@@ -1,4 +1,5 @@
 import { WinnerCar } from '../../components/winnerCar/winnerCar.view';
+import { countWinners } from '../../constants';
 import { WinnerWithNameAndColor } from '../../types';
 import './winners.style.css';
 
@@ -33,27 +34,23 @@ export class Winners {
         const div = <HTMLDivElement>document.createElement('div');
         div.innerHTML = `
       <h3>Winners <span class="winners__count">${count}</span></h3>
-      <span>Page #<span class="winners__page">${page}</span></span>`;
-        return div;
-    }
-
-    public getTable(cars: WinnerWithNameAndColor[], page: number): void {
-        const div = <HTMLDivElement>document.querySelector('.winners__table');
-        const table = <HTMLDivElement>document.createElement('div');
-        const nameTable = <HTMLDivElement>document.createElement('div');
-        nameTable.innerHTML = `<div class="winners__nameTable">
+      <span>Page #<span class="winners__page">${page}</span></span>
+      <div class="winners__nameTable">
       <div>Number</div>
       <div>Car</div>
       <div>Name</div>
       <div class="winners__wins">Wins</div>
       <div class="winners__time">Best time (seconds)</div>
       </div>`;
-        table.appendChild(nameTable);
-        cars.map((element, index) => {
-            const winner = this.winnerCar.render(element, (page - 1) * 10 + index + 1);
-            table.appendChild(winner);
+        return div;
+    }
+
+    public getTable(cars: WinnerWithNameAndColor[], page: number): void {
+        const div = <HTMLDivElement>document.querySelector('.winners__table');
+        cars.forEach((element, index) => {
+            const winner = this.winnerCar.render(element, (page - 1) * countWinners + index + 1);
+            div.appendChild(winner);
         });
-        div.appendChild(table);
     }
 
     private getPagination(): Element {
