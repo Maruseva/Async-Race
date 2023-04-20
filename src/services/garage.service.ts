@@ -1,10 +1,10 @@
-import { countCars } from '../constants';
+import { baseUrl, countCars } from '../constants';
 import { EngineError } from '../error/engineError';
 import { Car, CarWithoudId, CarsPage, CarMove } from '../types';
 
 export class GarageService {
     public async getCars(page: number = 1): Promise<CarsPage> {
-        const response = await fetch(`http://127.0.0.1:3000/garage/?_page=${page}&_limit=${countCars}`, {
+        const response = await fetch(`${baseUrl}/garage/?_page=${page}&_limit=${countCars}`, {
             method: 'GET',
         });
         const cars = await response.json();
@@ -14,7 +14,7 @@ export class GarageService {
     }
 
     public async addCar(car: CarWithoudId): Promise<Car> {
-        const response = await fetch('http://127.0.0.1:3000/garage', {
+        const response = await fetch(`${baseUrl}/garage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(car),
@@ -23,21 +23,21 @@ export class GarageService {
     }
 
     public async deleteCar(id: number): Promise<{}> {
-        const response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+        const response = await fetch(`${baseUrl}/garage/${id}`, {
             method: 'DELETE',
         });
         return response.json();
     }
 
     public async getCar(id: number): Promise<Car> {
-        const response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+        const response = await fetch(`${baseUrl}/garage/${id}`, {
             method: 'GET',
         });
         return response.json();
     }
 
     public async updateCar(id: number, car: CarWithoudId): Promise<Car> {
-        const response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+        const response = await fetch(`${baseUrl}/garage/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(car),
@@ -46,14 +46,14 @@ export class GarageService {
     }
 
     public async startCar(id: number): Promise<CarMove> {
-        const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=started`, {
+        const response = await fetch(`${baseUrl}/engine/?id=${id}&status=started`, {
             method: 'PATCH',
         });
         return response.json();
     }
 
     public async stopCar(id: number): Promise<CarMove> {
-        const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=stopped`, {
+        const response = await fetch(`${baseUrl}/engine/?id=${id}&status=stopped`, {
             method: 'PATCH',
         });
         return response.json();
@@ -64,7 +64,7 @@ export class GarageService {
     ): Promise<{
         success: true;
     }> {
-        const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=drive`, {
+        const response = await fetch(`${baseUrl}/engine/?id=${id}&status=drive`, {
             method: 'PATCH',
         });
         if (response.status === 400 || response.status === 404 || response.status === 429 || response.status === 500) {

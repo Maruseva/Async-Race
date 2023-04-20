@@ -1,10 +1,10 @@
-import { countWinners } from "../constants";
+import { baseUrl, countWinners } from "../constants";
 import { DuplicateError } from "../error/duplicateError";
 import { CarWinner, WinnerWithoudId } from "../types";
 
 export class WinnersService {
     public async getWinners(page: number, sort: string, order: string): Promise<{count: number, winners: CarWinner[]}> {
-        const response = await fetch(`http://127.0.0.1:3000/winners/?_page=${page}&_limit=${countWinners}&_sort=${sort}&_order=${order}`, {
+        const response = await fetch(`${baseUrl}/winners/?_page=${page}&_limit=${countWinners}&_sort=${sort}&_order=${order}`, {
             method: 'GET',
         });
         const winners = await response.json();
@@ -14,7 +14,7 @@ export class WinnersService {
     }
 
     public async addWinner(car: CarWinner): Promise<CarWinner> {
-        const response = await fetch('http://127.0.0.1:3000/winners', {
+        const response = await fetch(`${baseUrl}/winners`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(car),
@@ -26,7 +26,7 @@ export class WinnersService {
     }
 
     public async updateWinner(id: number, car: WinnerWithoudId): Promise<CarWinner> {
-        const response = await fetch(`http://127.0.0.1:3000/winners/${id}`, {
+        const response = await fetch(`${baseUrl}/winners/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(car),
@@ -35,14 +35,14 @@ export class WinnersService {
     }
 
     public async getWinner(id: number): Promise<CarWinner> {
-        const response = await fetch(`http://127.0.0.1:3000/winners/${id}`, {
+        const response = await fetch(`${baseUrl}/winners/${id}`, {
             method: 'GET'
         });
         return response.json();
     }
 
     public async deleteWinner(id: number): Promise<{}> {
-        const response = await fetch(`http://127.0.0.1:3000/winners/${id}`, {
+        const response = await fetch(`${baseUrl}/winners/${id}`, {
             method: 'DELETE'
         });
         return response;
