@@ -1,0 +1,23 @@
+.winners__nameTable {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: blue;
+    color: white;
+    height: 50px;
+    font-size: 20px;
+    width: 450px;
+    padding: 0 5px;
+}
+
+.winners__nameTable  > div {
+    width: 80px;
+}
+
+.winners__wins {
+    cursor: pointer;
+}
+
+.winners__time {
+    cursor: pointer;
+}

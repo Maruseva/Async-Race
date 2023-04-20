@@ -1,0 +1,7 @@
+.garage__winner {
+    position: absolute;
+    top: 50px;
+    left: 310px;
+    color: red;
+    font-size: 35px;
+}
