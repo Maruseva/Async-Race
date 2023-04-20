@@ -6,7 +6,9 @@ import { getCarIcon } from '../../utils/car';
 export class CarInRow {
     public static render(car: Car): Element {
         const div = <HTMLDivElement>document.createElement('div');
-        div.innerHTML = `<div class="car__in__garage" data-id="${car.id}">
+        div.className = 'car__in__garage';
+        div.setAttribute('data-id', car.id.toString())
+        div.innerHTML = `
             <div>
                 <button class="select__car">SELECT</button>
                 <button class="remove__car">REMOVE</button>
@@ -17,8 +19,7 @@ export class CarInRow {
                 <button class="stop__car">B</button>
                     ${getCarIcon(car.color)}
                 <img src="${flagImg}" alt="flag" class="car__flagImg">
-            </div>
-        </div>`;
+            </div>`;
         return div;
     }
 }

@@ -6,10 +6,7 @@ export class Header {
     public render(): void {
         const root = <HTMLDivElement>document.querySelector(this.selector);
         const div = <HTMLDivElement>document.createElement('div');
-        div.innerHTML = `<div>
-            <button class="to__garage">TO GARAGE</button>
-            <button class="to__winners">TO WINNERS</button>
-        </div>`;
+        div.innerHTML = '<button class="to__garage">TO GARAGE</button> <button class="to__winners">TO WINNERS</button>';
         root.appendChild(div);
     }
 
